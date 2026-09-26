@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "personal-agent"
+version = "0.1.0"
+description = "Self-hosted personal AI agent (Meta Muse-like) with long-running goals, memory, Sentinel guard and credential vault"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.6",        # schemas
+    "openai>=1.40",         # OpenAI-compatible client, pointed at DeepSeek
+    "httpx>=0.27",          # web.fetch / web.search tools
+    "structlog>=24.1",      # logging
+    "cryptography>=41",     # credential vault (AES-GCM + scrypt)
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-asyncio>=0.23", "ruff>=0.5", "mypy>=1.10"]
+
+[project.scripts]
+pa = "personal_agent.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+personal_agent = ["prompts/*.md"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+ignore = ["RUF001", "RUF002", "RUF003"]
+
+[tool.mypy]
+strict = true
+python_version = "3.11"
+mypy_path = "src"
+packages = ["personal_agent"]
+plugins = ["pydantic.mypy"]

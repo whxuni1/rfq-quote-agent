@@ -51,15 +51,15 @@
 - 不绕过网站反爬/验证码；不做账号批量操作。
 - 不训练/微调模型。
 
-## 6. 待决问题（需产品负责人拍板）
+## 6. 已决事项（2026-09-26）
 
-| # | 问题 | 选项 | 建议 |
-|---|---|---|---|
-| Q1 | 与本仓库 AGENTS.md "不调用外部网络 API" 的关系 | a) 个人 Agent 另开仓库；b) 本仓库子包但单独一份 AGENTS 约束 | **a**：约束冲突是根本性的，个人 Agent 必须触网 |
-| Q2 | 部署形态 | 单用户自托管 / 多租户 SaaS | MVP 单用户自托管（大幅简化隔离与合规） |
-| Q3 | 默认 LLM | 云端 OpenAI 兼容服务 / 本地模型 | 规划用强模型，Sentinel 辅助检查可用小模型 |
-| Q4 | 首个外部数据源 | Gmail+Google Calendar / IMAP+CalDAV | IMAP+CalDAV（协议开放，避免单一厂商） |
-| Q5 | 数据存储 | SQLite / Postgres | MVP SQLite（单用户），schema 兼容 Postgres |
+| # | 问题 | 决定 |
+|---|---|---|
+| Q1 | 与本仓库 AGENTS.md "不调用外部网络 API" 的关系 | 独立项目。当前会话无权创建新仓库，暂放在本仓库 `personal-agent/` 子目录（自带 AGENTS.md），后续用 `git subtree split` 拆出 |
+| Q2 | 部署形态 | 单用户自托管 |
+| Q3 | 默认 LLM | **DeepSeek**（OpenAI 兼容，`https://api.deepseek.com`）：规划 `deepseek-v4-pro`，路由/记忆/对话 `deepseek-flash`，均可配置 |
+| Q4 | 首个外部数据源 | IMAP/SMTP 邮件（已实现）；CalDAV 日历留待 v0.2 |
+| Q5 | 数据存储 | SQLite（标准库 `sqlite3`，WAL） |
 
 ## 参考
 - Meta 官方：Introducing Muse — https://about.fb.com/news/2026/09/introducing-muse-personal-ai-agent/

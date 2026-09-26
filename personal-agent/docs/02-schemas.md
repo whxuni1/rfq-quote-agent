@@ -1,5 +1,7 @@
 # 02 — 共享 Schema（草案）
 
+> 实现以 `src/personal_agent/schemas/` 为准；本文是设计时草案，字段细节已有调整（如 `ActionRequest` 不再携带 `data_labels`，敏感数据由 Sentinel 按记忆值匹配）。
+
 约定：Pydantic v2，默认 `model_config = ConfigDict(frozen=True)`；时间一律 UTC `datetime`；ID 为 ULID 字符串。模块间只传模型实例或其 JSON。
 
 ## 1. 消息与通道

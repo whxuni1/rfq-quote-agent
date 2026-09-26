@@ -77,10 +77,10 @@ created → planning → running ⇄ waiting_approval
 class LLMClient(Protocol):
     async def chat(self, messages: list[ChatMessage], *, tools: list[ToolSpec] | None = None,
                    response_format: type[BaseModel] | None = None,
-                   model_role: Literal["planner", "router", "memory", "sentinel_aux"]) -> LLMResponse: ...
+                   role: Literal["planner", "router", "memory", "chat"]) -> LLMResponse: ...
 ```
 
-- 实现：`OpenAICompatClient`，基于官方 `openai` Python SDK，通过 `base_url` + `api_key` 指向任意兼容服务。
+- 实现：`OpenAICompatClient`，基于官方 `openai` Python SDK，通过 `base_url` + `api_key` 指向任意兼容服务；默认 DeepSeek。
 - 按 `model_role` 在配置中映射到不同模型（规划用强模型，路由/记忆抽取可用小模型）。
 - 结构化输出：优先 `response_format=json_schema`；服务不支持时降级为"JSON 提示 + Pydantic 校验 + 最多 2 次修复重试"。
 - 测试：`FakeLLMClient` 按脚本返回，所有 agent 单测不触网。
@@ -98,9 +98,9 @@ class LLMClient(Protocol):
 |---|---|---|
 | 语言 | Python 3.11+ | 与 RFQ 项目一致 |
 | 数据模型 | Pydantic v2 | 同上 |
-| 存储 | SQLite（SQLAlchemy 2.x） | 单用户够用，可迁 Postgres |
+| 存储 | SQLite（标准库 `sqlite3`） | 单用户够用，SQL 保持可迁 Postgres |
 | 向量召回 | sqlite-vec（v0.2） | 不引入额外服务 |
-| LLM SDK | `openai`（仅作 OpenAI 兼容客户端） | 用户要求 |
+| LLM SDK | `openai`（仅作 OpenAI 兼容客户端，默认指向 DeepSeek） | DeepSeek 只支持 `json_object`，schema 放 prompt + Pydantic 校验 + 修复重试 |
 | Web 通道 | FastAPI + SSE | 轻量 |
 | 浏览器自动化 | Playwright（v0.3，容器内） | — |
 | 加密 | `cryptography`（Fernet / AES-GCM） | vault |
