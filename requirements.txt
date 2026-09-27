@@ -1,0 +1,5 @@
+# Runtime
+pydantic>=2.6,<3        # 全部跨模块 schema（v2）
+pdfplumber>=0.11        # tools/pdf_extract.py：PDF 文本+表格抽取
+openpyxl>=3.1           # tools/xlsx_bom.py：Excel BOM 解析
+structlog>=24.1         # 结构化日志（rfq_id/agent/step）

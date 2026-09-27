@@ -1,0 +1,22 @@
+[
+  {
+    "quote_intent": {
+      "project_type": "NPI+Mass",
+      "annual_volume": "200000",
+      "peak_monthly_volume": "20000",
+      "project_life_years": 5,
+      "currency": "USD",
+      "incoterm_target": "FCA",
+      "payment_terms_target": "60 days net",
+      "nre_scope": [
+        "tooling",
+        "validation"
+      ],
+      "special_reqs": [
+        "24 months warranty"
+      ],
+      "skip_agents": []
+    },
+    "ambiguity_flags": []
+  }
+]

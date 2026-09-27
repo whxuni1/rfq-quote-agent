@@ -1,0 +1,32 @@
+[
+  {
+    "quote_intent": {
+      "project_type": "NPI+Mass",
+      "annual_volume": "150000",
+      "peak_monthly_volume": "15000",
+      "project_life_years": 6,
+      "currency": "USD",
+      "incoterm_target": "DAP",
+      "payment_terms_target": "90 days after invoice",
+      "nre_scope": [
+        "tooling",
+        "validation",
+        "software_license"
+      ],
+      "special_reqs": [
+        "36 months or 100,000 km warranty",
+        "all ICs AEC-Q100"
+      ],
+      "skip_agents": []
+    },
+    "ambiguity_flags": [
+      {
+        "flag_id": "LLM-1",
+        "category": "term_undefined",
+        "description": "Software license fee basis (per unit vs lump sum) not defined",
+        "related_line_no": null,
+        "severity": "medium"
+      }
+    ]
+  }
+]

@@ -1,6 +1,6 @@
 # Task 15 — Ingestion Parser Agent
 
-Status: TODO
+Status: DOING
 
 ## 目标
 实现 `agents/ingestion.py` + `tools/pdf_extract.py` + `tools/xlsx_bom.py`，把 RFQ 包（PDF + Excel）转为 `RFQPackage`。这是 pipeline 唯一入口，产出必须 schema 合法且零外部依赖。
@@ -66,3 +66,51 @@ Status: TODO
 - 不解析图纸（PDF 图纸二进制跳过，仅记录 `DrawingRef`）。
 - 不调 OCR；fixture PDF 必须是文本可抽取（测试前提）。
 - 不得为"提高准确率"引入任何外部 API。
+
+## 完成记录
+
+> 状态保持 DOING，PR 合并后改 DONE（见 `tasks/40-iteration-loop.md` 第 6 步）。
+
+### 改动文件
+- 项目骨架：`pyproject.toml`（ruff / mypy --strict / pytest 配置）、`requirements.txt`、`requirements-dev.txt`、`.gitignore`
+- Schema（仅本任务所需）：`schemas/rfq.py`、`schemas/bom.py`、`schemas/intent.py`
+- LLM 抽象：`llm/base.py`（`LLMClient` 协议）、`llm/mock.py`（回放 mock）
+- 工具：`tools/pdf_extract.py`、`tools/xlsx_bom.py`、`tools/__init__.py`（`ToolError`）
+- Agent：`agents/ingestion.py`、`prompts/ingestion.md`、`prompts/__init__.py`（`load_prompt`）
+- 测试：`tests/unit/test_xlsx_bom.py`、`tests/unit/test_pdf_extract.py`、`tests/unit/test_schemas_bom.py`、`tests/agents/test_ingestion.py`
+- Fixture：`tests/fixtures/build_fixtures.py` 生成 case1..3 的 `spec.pdf` / `bom.xlsx` / 图纸占位 / `llm_ingestion.json`
+
+### 关键决策
+1. **歧义标记分两层**：可机械判定的 5 类（spec_gap / uom / qty 跨 sheet / source_conflict / drawing_missing）走确定性规则；LLM 只补充语义歧义。规则优先，与规则同 (category, line) 的 LLM flag 去重；最终统一编号 `AMB-001..`。
+2. **spec_gap 规则**：规格章节标题经 `classify_material` 命中某物料类别、而 BOM 无该类别 → high。保守但确定。
+3. **3 个 fixture 分别覆盖 3 种层级策略**：case1 level 列、case2 缩进（3 层 + 多 sheet 用量冲突）、case3 父件列。
+4. **PDF fixture 用内置极简 PDF 写入器生成**，未引入 reportlab 等新依赖。
+5. **图纸查找**：在 `package_dir`（默认 PDF 所在目录）下递归匹配文件名前缀 = 图纸号。
+
+### 遗留问题（结构化提问，需人工确认）
+```
+[BLOCKER] task=15-ingestion
+问题：QuantityReq / DeliveryReq / QualityReq 在 docs/02 只有类型名、无字段定义。
+依据：docs/02 §1 SpecDoc。
+当前实现：QuantityReq(annual_volume, project_life_years, raw_text)、
+          DeliveryReq(sop_date, incoterm, delivery_location, raw_text)、
+          QualityReq(standards, ppap_level, raw_text)。
+候选：A) 采纳并回写 docs/02  B) 另行指定字段
+```
+```
+[BLOCKER] task=15-ingestion
+问题：Ingestion 的 LLM 产出 QuoteIntent 草稿，但 RFQPackage 无字段承载它。
+依据：本任务要求"生成 QuoteIntent 草稿"，docs/00 又规定 Orchestrator.plan() 生成 QuoteIntent。
+当前实现：IngestionAgent.run() 返回 tuple[RFQPackage, QuoteIntent]。
+候选：A) 保持，Task 10 plan() 可把草稿作为参考  B) 丢弃草稿，Ingestion 只产歧义
+      C) 在 RFQPackage 增加 intent_draft 字段（需改 docs/02）
+```
+```
+[BLOCKER] task=15-ingestion
+问题：parse_bom 权威签名 (xlsx_path, rfq_id) 拿不到项目名，无法按"root 用项目名构造"。
+当前实现：增加可选参数 project_name（默认用 rfq_id），不破坏权威签名。
+候选：A) 采纳并回写 Task 20 签名  B) 合成 root 一律用 rfq_id
+```
+- `auto_grade_required` 目前只看行内文本（描述/规格/厂商）。规格书全局"所有 IC 须 AEC-Q100"尚未下传到行，建议由 EngineeringAgent（Task 11）复核。
+- 多个 BOM 类 sheet 时，取第一个为主 BOM，其余只参与用量一致性检查。
+- 尚无 `.github/workflows/ci.yml`（不属于任何任务），建议单独补。

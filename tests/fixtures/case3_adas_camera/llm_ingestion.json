@@ -1,0 +1,32 @@
+[
+  {
+    "quote_intent": {
+      "project_type": "NPI+Mass",
+      "annual_volume": "300000",
+      "peak_monthly_volume": "30000",
+      "project_life_years": 7,
+      "currency": "EUR",
+      "incoterm_target": "DDP",
+      "payment_terms_target": "45 days net",
+      "nre_scope": [
+        "tooling",
+        "jigs",
+        "validation"
+      ],
+      "special_reqs": [
+        "60 months warranty",
+        "active alignment"
+      ],
+      "skip_agents": []
+    },
+    "ambiguity_flags": [
+      {
+        "flag_id": "LLM-1",
+        "category": "spec_gap",
+        "description": "Spec requires IR-cut filter and 120 deg lens but BOM has no lens or filter line",
+        "related_line_no": null,
+        "severity": "high"
+      }
+    ]
+  }
+]

@@ -1,0 +1,73 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 2192 >>
+stream
+BT /F2 18 Tf 50.0 763.2 Td (RFQ TECHNICAL SPECIFICATION) Tj ET
+BT /F1 10 Tf 50.0 737.4 Td (Customer: Nova EV Motors) Tj ET
+BT /F1 10 Tf 50.0 722.4 Td (Project: CDC-X1 Cockpit Domain Controller) Tj ET
+BT /F2 14 Tf 50.0 700.0 Td (1 Scope) Tj ET
+BT /F1 10 Tf 50.0 676.6 Td (Cockpit domain controller driving 2 displays: core board, carrier board,) Tj ET
+BT /F1 10 Tf 50.0 661.6 Td (die-cast housing, heatsink and harness. All ICs shall be AEC-Q100 qualified.) Tj ET
+BT /F2 14 Tf 50.0 639.2 Td (2 Thermal Requirements) Tj ET
+BT /F1 10 Tf 50.0 615.8 Td (Operating temperature -40 to 85 C ambient; SoC junction below 105 C.) Tj ET
+BT /F2 14 Tf 50.0 593.4 Td (3 Quantity) Tj ET
+50.0 579.0 m 370.0 579.0 l S
+50.0 561.0 m 370.0 561.0 l S
+50.0 543.0 m 370.0 543.0 l S
+50.0 525.0 m 370.0 525.0 l S
+50.0 507.0 m 370.0 507.0 l S
+50.0 579.0 m 50.0 507.0 l S
+210.0 579.0 m 210.0 507.0 l S
+370.0 579.0 m 370.0 507.0 l S
+BT /F1 9 Tf 54.0 567.3 Td (Item) Tj ET
+BT /F1 9 Tf 214.0 567.3 Td (Value) Tj ET
+BT /F1 9 Tf 54.0 549.3 Td (Annual volume) Tj ET
+BT /F1 9 Tf 214.0 549.3 Td (150,000) Tj ET
+BT /F1 9 Tf 54.0 531.3 Td (Peak monthly) Tj ET
+BT /F1 9 Tf 214.0 531.3 Td (15,000) Tj ET
+BT /F1 9 Tf 54.0 513.3 Td (Project life) Tj ET
+BT /F1 9 Tf 214.0 513.3 Td (6 years) Tj ET
+BT /F2 14 Tf 50.0 480.6 Td (4 Delivery) Tj ET
+BT /F1 10 Tf 50.0 457.2 Td (SOP Q3 2027. Incoterm DAP customer plant.) Tj ET
+BT /F1 10 Tf 50.0 442.2 Td (Delivery location: Hefei, China) Tj ET
+BT /F2 14 Tf 50.0 419.8 Td (5 Software) Tj ET
+BT /F1 10 Tf 50.0 396.4 Td (Hypervisor and Android Automotive license per unit, quoted separately.) Tj ET
+BT /F2 14 Tf 50.0 374.0 Td (6 Quality Requirements) Tj ET
+BT /F1 10 Tf 50.0 350.6 Td (Supplier shall be certified to IATF 16949 and ISO 9001.) Tj ET
+BT /F1 10 Tf 50.0 335.6 Td (Submission: PPAP Level 3 with full APQP deliverables.) Tj ET
+BT /F2 14 Tf 50.0 313.2 Td (7 Commercial Terms) Tj ET
+BT /F1 10 Tf 50.0 289.8 Td (- Payment terms: 90 days after invoice.) Tj ET
+BT /F1 10 Tf 50.0 274.8 Td (- Warranty: 36 months or 100,000 km.) Tj ET
+BT /F1 10 Tf 50.0 259.8 Td (- Quotation validity: 90 days.) Tj ET
+BT /F1 10 Tf 50.0 244.8 Td (- Tooling shall be owned by customer after full payment.) Tj ET
+endstream
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000212 00000 n 
+0000000314 00000 n 
+0000000450 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+2694
+%%EOF

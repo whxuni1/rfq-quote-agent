@@ -1,0 +1,6 @@
+-r requirements.txt
+pytest>=8
+pytest-cov>=5
+mypy>=1.10
+ruff>=0.5
+types-openpyxl          # openpyxl 类型桩，mypy --strict 需要
