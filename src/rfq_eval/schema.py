@@ -291,6 +291,18 @@ class PriceCard(BaseModel):
     note: str
     models: dict[str, dict[str, Decimal]] = Field(default_factory=dict)
 
+    @model_validator(mode="before")
+    @classmethod
+    def reject_float_prices(cls, value: object) -> object:
+        if isinstance(value, dict):
+            models = value.get("models")
+            if isinstance(models, dict):
+                for prices in models.values():
+                    if isinstance(prices, dict):
+                        for amount in prices.values():
+                            _reject_float(amount)
+        return value
+
 
 class EvalDataset(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")

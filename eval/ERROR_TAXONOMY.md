@@ -8,7 +8,7 @@ A code marked release_blocker fails a production decision when it is present on 
 - TABLE_CELL_MISMATCH | document_extraction | A labeled table cell differs from the extraction. | release_blocker=True
 - QUOTE_NOT_IN_EXTRACT | document_extraction | The labeled source quote is absent from extracted text. | release_blocker=True
 - BOM_FALSE_NEGATIVE | bom_identification | A labeled BOM line is missing from the parse. | release_blocker=True
-- BOM_FALSE_POSITIVE | bom_identification | A line was emitted that is not in the labeled BOM. | release_blocker=True
+- BOM_FALSE_POSITIVE | bom_identification | A predicted occurrence is not an unmatched labeled BOM line. Duplicate copies count. | release_blocker=True
 - HIERARCHY_ERROR | bom_identification | Level or parent does not match the labeled tree. | release_blocker=True
 - UOM_MISMATCH | units_qty_currency | Unit of measure differs from the labeled cell. | release_blocker=True
 - QTY_MISMATCH | units_qty_currency | Quantity differs from the labeled quantity. | release_blocker=True
@@ -19,8 +19,8 @@ A code marked release_blocker fails a production decision when it is present on 
 - MISSING_INFO_FALSE_POSITIVE | missing_information | An ambiguity flag was raised with no labeled cause. | release_blocker=True
 - CITATION_MISSING | citation_fidelity | A returned claim has no source citation. | release_blocker=True
 - CITATION_UNRESOLVED | citation_fidelity | The citation locator does not contain the quote. | release_blocker=True
-- CITATION_UNSUPPORTED | citation_fidelity | The citation quote does not occur in the source document. | release_blocker=True
-- COST_MISMATCH | cost_calculation | Piece price, NRE, or project value differs from the labeled rollup. | release_blocker=True
+- CITATION_UNSUPPORTED | citation_fidelity | The citation quote does not occur in the named sheet, cell, or page. | release_blocker=True
+- COST_MISMATCH | cost_calculation | Piece price, NRE, currency, or project value differs from the labeled rollup. | release_blocker=True
 - COST_MISSING_VOLUME_DEFAULTED | cost_calculation | Missing volume was treated as zero instead of data-missing. | release_blocker=True
 - GATE_MISSED | human_review_routing | A labeled review gate did not trigger. | release_blocker=True
 - GATE_FALSE_TRIGGER | human_review_routing | A review gate triggered without a labeled cause. | release_blocker=True

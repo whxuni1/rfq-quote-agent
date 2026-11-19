@@ -13,15 +13,15 @@ python -m rfq_eval
 pytest
 ```
 
-The command reloads `eval/dataset`, rebuilds the text PDFs and workbooks, probes `rfq_agent`, and overwrites this report. Dataset QA failures withhold product scores.
+The command loads the persisted labels in `eval/dataset`. It rewrites that directory only with `--regenerate`, or on a first run when no manifest is present. It then rebuilds the text PDFs and workbooks, probes `rfq_agent`, and overwrites this report. Dataset QA failures withhold product scores.
 
 ## Run
 
-- Run id: `20261119T131316Z`
-- Generated: 2026-11-19 21:13:16 Asia/Shanghai (2026-11-19 13:13:16 UTC)
+- Run id: `20261119T132326Z`
+- Generated: 2026-11-19 21:23:26 Asia/Shanghai (2026-11-19 13:23:26 UTC)
 - Harness: `0.1.0`
 - Dataset: `2026.11.19` sha256 `5342a2c3e27365265cac27c38a8f8992d0a7b8f22236b7d340560c4670b1f456`
-- Git: `6acddbdf6eda72fc0df583e67bf232c113346a83`
+- Git: `70c226054e1690ccb0ef4c56f64d76bdc485dcac`
 - Model id: `absent` (source `absent`)
 - Reported model id: `absent`
 - Prompt hashes: `{}`
@@ -74,7 +74,7 @@ These checks validate labels and fixtures. They are not product accuracy.
 | injection_tokens | True | ok |
 | label_oracles | True | ok |
 | required_controls | True | ok |
-| price_card_empty | True | models=[] |
+| price_card | True | unpriced |
 | pdf_quotes_extractable | True | ok |
 | xlsx_roundtrip | True | ok |
 
@@ -99,7 +99,7 @@ Rubrics defined and not scored:
 - TABLE_CELL_MISMATCH | document_extraction | A labeled table cell differs from the extraction. | release_blocker=True
 - QUOTE_NOT_IN_EXTRACT | document_extraction | The labeled source quote is absent from extracted text. | release_blocker=True
 - BOM_FALSE_NEGATIVE | bom_identification | A labeled BOM line is missing from the parse. | release_blocker=True
-- BOM_FALSE_POSITIVE | bom_identification | A line was emitted that is not in the labeled BOM. | release_blocker=True
+- BOM_FALSE_POSITIVE | bom_identification | A predicted occurrence is not an unmatched labeled BOM line. Duplicate copies count. | release_blocker=True
 - HIERARCHY_ERROR | bom_identification | Level or parent does not match the labeled tree. | release_blocker=True
 - UOM_MISMATCH | units_qty_currency | Unit of measure differs from the labeled cell. | release_blocker=True
 - QTY_MISMATCH | units_qty_currency | Quantity differs from the labeled quantity. | release_blocker=True
@@ -110,8 +110,8 @@ Rubrics defined and not scored:
 - MISSING_INFO_FALSE_POSITIVE | missing_information | An ambiguity flag was raised with no labeled cause. | release_blocker=True
 - CITATION_MISSING | citation_fidelity | A returned claim has no source citation. | release_blocker=True
 - CITATION_UNRESOLVED | citation_fidelity | The citation locator does not contain the quote. | release_blocker=True
-- CITATION_UNSUPPORTED | citation_fidelity | The citation quote does not occur in the source document. | release_blocker=True
-- COST_MISMATCH | cost_calculation | Piece price, NRE, or project value differs from the labeled rollup. | release_blocker=True
+- CITATION_UNSUPPORTED | citation_fidelity | The citation quote does not occur in the named sheet, cell, or page. | release_blocker=True
+- COST_MISMATCH | cost_calculation | Piece price, NRE, currency, or project value differs from the labeled rollup. | release_blocker=True
 - COST_MISSING_VOLUME_DEFAULTED | cost_calculation | Missing volume was treated as zero instead of data-missing. | release_blocker=True
 - GATE_MISSED | human_review_routing | A labeled review gate did not trigger. | release_blocker=True
 - GATE_FALSE_TRIGGER | human_review_routing | A review gate triggered without a labeled cause. | release_blocker=True

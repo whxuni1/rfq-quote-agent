@@ -49,7 +49,7 @@ def thresholds() -> tuple[Threshold, ...]:
         Threshold(
             gate_id="bom_identification",
             title="BOM line-item precision and recall",
-            review_rule="Precision >= 0.98 and recall >= 0.98 on match keys. Hierarchy exact on matched lines. Adversarial and negative cases exact. Unscored cases fail the gate.",
+            review_rule="Precision >= 0.98 and recall >= 0.98 on match keys. Each extra predicted occurrence, including a duplicate of a labeled line, is a false positive. Hierarchy accuracy = 1 on every predicted occurrence of a matched line. Adversarial and negative cases exact. Unscored cases fail the gate.",
             primary_bar=Decimal("0.98"),
             production_min_cases=n,
             production_wilson_floor=floor,
@@ -76,7 +76,7 @@ def thresholds() -> tuple[Threshold, ...]:
         Threshold(
             gate_id="citation_fidelity",
             title="Source citation fidelity",
-            review_rule="Every labeled claim is supported by a locator that contains its quote. Fidelity >= 0.99 and unsupported-citation rate <= 0.01.",
+            review_rule="Every labeled claim is supported by a locator that contains its quote. A spreadsheet locator names an existing sheet, and a cell or range suffix is resolved only inside that sheet. Fidelity >= 0.99 and unsupported-citation rate <= 0.01.",
             primary_bar=Decimal("0.99"),
             production_min_cases=n,
             production_wilson_floor=floor,
@@ -85,7 +85,7 @@ def thresholds() -> tuple[Threshold, ...]:
         Threshold(
             gate_id="cost_calculation",
             title="Cost calculation correctness",
-            review_rule="Piece price, NRE, and project value match the labeled Decimal rollup at 4 decimal places. Missing volume must not become zero. Exact on every labeled tree.",
+            review_rule="Piece price, NRE, currency, and project value match the labeled Decimal rollup at 4 decimal places. Currency is checked even when project volume is missing. Missing volume must not become zero. Exact on every labeled tree.",
             primary_bar=Decimal("1"),
             production_min_cases=n,
             production_wilson_floor=floor,

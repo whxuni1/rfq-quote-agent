@@ -64,7 +64,7 @@ _MINIMUMS: dict[str, dict[str, Decimal]] = {
     "bom_identification": {
         "precision": Decimal("0.98"),
         "recall": Decimal("0.98"),
-        "hierarchy_accuracy": Decimal("0.95"),
+        "hierarchy_accuracy": Decimal("1"),
     },
     "units_qty_currency": {
         "qty_accuracy": Decimal("0.99"),

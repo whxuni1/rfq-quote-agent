@@ -5,6 +5,7 @@ counted as a pass. Item rates are diagnostic. Gate decisions are applied by
 the runner using thresholds.py.
 """
 
+import re
 from collections import Counter
 from decimal import Decimal
 
@@ -12,6 +13,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from rfq_eval.schema import (
     BOMGold,
+    BOMLinePrediction,
     CitationPrediction,
     CostCase,
     CostPrediction,
@@ -24,12 +26,14 @@ from rfq_eval.schema import (
     IsolationPrediction,
     RecoveryCase,
     RecoveryPrediction,
+    SheetSpec,
 )
 from rfq_eval.stats import ratio
 from rfq_eval.taxonomy import ErrorCode
 from rfq_eval.thresholds import OPTION_COUNT_MAX, OPTION_COUNT_MIN, REQUIRED_OPTIONS
 
 _Q = Decimal("0.0001")
+_CELL_REF = re.compile(r"^([A-Z]+)([1-9][0-9]*)$")
 
 
 class ItemFailure(BaseModel):
@@ -134,21 +138,94 @@ def _page_text(case: DocumentCase) -> str:
     return "\n".join(parts)
 
 
-def _sheet_text(case: DocumentCase) -> str:
-    parts: list[str] = []
-    for sheet in case.sheets:
-        parts.append(sheet.name)
-        parts.extend(sheet.headers)
+def _column_index(letters: str) -> int:
+    index = 0
+    for char in letters:
+        index = index * 26 + (ord(char) - 64)
+    return index
+
+
+def _parse_cell(token: str) -> tuple[int, int] | None:
+    match = _CELL_REF.fullmatch(token)
+    if match is None:
+        return None
+    return _column_index(match.group(1)), int(match.group(2))
+
+
+def _sheet_grid(sheet: SheetSpec) -> list[list[str]]:
+    width = len(sheet.headers)
+    for row in sheet.rows:
+        width = max(width, len(row))
+    grid = [list(sheet.headers) + [""] * (width - len(sheet.headers))]
+    for row in sheet.rows:
+        grid.append(list(row) + [""] * (width - len(row)))
+    return grid
+
+
+def _cell_at(grid: list[list[str]], column: int, row: int) -> str | None:
+    if row < 1 or row > len(grid):
+        return None
+    line = grid[row - 1]
+    if column < 1 or column > len(line):
+        return None
+    return line[column - 1]
+
+
+def _cells_in_ref(grid: list[list[str]], ref: str) -> list[str] | None:
+    if ":" in ref:
+        start_token, end_token = ref.split(":", 1)
+        start = _parse_cell(start_token)
+        end = _parse_cell(end_token)
+        if start is None or end is None or start[0] > end[0] or start[1] > end[1]:
+            return None
+        values: list[str] = []
+        for row in range(start[1], end[1] + 1):
+            for column in range(start[0], end[0] + 1):
+                value = _cell_at(grid, column, row)
+                if value is None:
+                    return None
+                values.append(value)
+        return values
+    parsed = _parse_cell(ref)
+    if parsed is None:
+        return None
+    value = _cell_at(grid, parsed[0], parsed[1])
+    if value is None:
+        return None
+    return [value]
+
+
+def _sheet_region(case: DocumentCase, locator: str) -> str | None:
+    if not locator.startswith("sheet:"):
+        return None
+    body = locator.removeprefix("sheet:")
+    if not body or body.startswith("!"):
+        return None
+    if "!" in body:
+        name, ref = body.rsplit("!", 1)
+    else:
+        name, ref = body, None
+    if not name:
+        return None
+    sheet = next((item for item in case.sheets if item.name == name), None)
+    if sheet is None:
+        return None
+    if ref is None:
+        parts = [sheet.name, *sheet.headers]
         for row in sheet.rows:
             parts.extend(row)
-    return "\n".join(parts)
+        return "\n".join(parts)
+    cells = _cells_in_ref(_sheet_grid(sheet), ref)
+    if cells is None:
+        return None
+    return "\n".join(cells)
 
 
 def _region_text(case: DocumentCase, locator: str, file_role: str) -> str | None:
     if file_role == "spec_pdf" and locator == "page:1":
         return _page_text(case)
-    if file_role == "bom_xlsx" and locator.startswith("sheet:"):
-        return _sheet_text(case)
+    if file_role == "bom_xlsx":
+        return _sheet_region(case, locator)
     return None
 
 
@@ -254,6 +331,33 @@ def score_extraction(
     )
 
 
+def _group_lines(lines: list[BOMLinePrediction]) -> dict[str, list[BOMLinePrediction]]:
+    grouped: dict[str, list[BOMLinePrediction]] = {}
+    for line in lines:
+        grouped.setdefault(line.match_key, []).append(line)
+    return grouped
+
+
+def _bom_extras(
+    gold_counts: Counter[str],
+    optional_keys: set[str],
+    pred_counts: Counter[str],
+) -> list[str]:
+    extras: list[str] = []
+    for key, count in gold_counts.items():
+        surplus = pred_counts[key] - count
+        if surplus > 0:
+            extras.extend([key] * surplus)
+    for key in optional_keys:
+        surplus = pred_counts[key] - 1
+        if surplus > 0:
+            extras.extend([key] * surplus)
+    for key, count in pred_counts.items():
+        if key not in gold_counts and key not in optional_keys:
+            extras.extend([key] * count)
+    return extras
+
+
 def score_bom(
     cases: list[DocumentCase],
     predictions: dict[str, DocumentPrediction | None],
@@ -283,20 +387,22 @@ def score_bom(
                 )
             outcomes.append(_case(case.case_id, case.polarity, failures))
             continue
-        gold_keys = [line.match_key for line in case.bom if line.qty_rule != "omit_or_exact"]
+        required = [line for line in case.bom if line.qty_rule != "omit_or_exact"]
         optional = [line for line in case.bom if line.qty_rule == "omit_or_exact"]
-        pred_keys = [line.match_key for line in pred.bom_lines]
-        tp, pn, gn = _counter_overlap(gold_keys, [key for key in pred_keys if key in set(gold_keys)])
-        extra = [key for key in pred_keys if key not in set(gold_keys) and key not in {line.match_key for line in optional}]
+        gold_counts = Counter(line.match_key for line in required)
+        optional_keys = {line.match_key for line in optional}
+        pred_counts = Counter(line.match_key for line in pred.bom_lines)
+        tp = sum(min(pred_counts[key], count) for key, count in gold_counts.items())
+        extras = _bom_extras(gold_counts, optional_keys, pred_counts)
         true_positive += tp
-        pred_n += tp + len(extra)
-        gold_n += gn
-        missing = list((Counter(gold_keys) - Counter(pred_keys)).elements())
+        pred_n += tp + len(extras)
+        gold_n += sum(gold_counts.values())
+        missing = list((gold_counts - pred_counts).elements())
         for key in missing:
             failures.append(
                 _fail(case.case_id, case.polarity, ErrorCode.BOM_FALSE_NEGATIVE, key, "missing")
             )
-        for key in extra:
+        for key in extras:
             failures.append(
                 _fail(case.case_id, case.polarity, ErrorCode.BOM_FALSE_POSITIVE, "not in BOM", key)
             )
@@ -311,41 +417,39 @@ def score_bom(
                         part_no,
                     )
                 )
-        gold_by_key = {line.match_key: line for line in case.bom}
-        pred_by_key = {line.match_key: line for line in pred.bom_lines}
+        grouped = _group_lines(pred.bom_lines)
+        gold_by_key: dict[str, BOMGold] = {}
+        for line in case.bom:
+            gold_by_key.setdefault(line.match_key, line)
         for key, gold in gold_by_key.items():
             if gold.qty_rule == "omit_or_exact":
                 continue
-            found = pred_by_key.get(key)
-            if found is None:
-                continue
-            hierarchy_n += 1
-            if found.level == gold.level and found.parent_match_key == gold.parent_match_key:
-                hierarchy_ok += 1
-            else:
-                failures.append(
-                    _fail(
-                        case.case_id,
-                        case.polarity,
-                        ErrorCode.HIERARCHY_ERROR,
-                        f"level={gold.level} parent={gold.parent_match_key}",
-                        f"level={found.level} parent={found.parent_match_key}",
+            for found in grouped.get(key, []):
+                hierarchy_n += 1
+                if found.level == gold.level and found.parent_match_key == gold.parent_match_key:
+                    hierarchy_ok += 1
+                else:
+                    failures.append(
+                        _fail(
+                            case.case_id,
+                            case.polarity,
+                            ErrorCode.HIERARCHY_ERROR,
+                            f"level={gold.level} parent={gold.parent_match_key}",
+                            f"level={found.level} parent={found.parent_match_key}",
+                        )
                     )
-                )
         for gold in optional:
-            found = pred_by_key.get(gold.match_key)
-            if found is None:
-                continue
-            if found.qty_per not in gold.accept_qty:
-                failures.append(
-                    _fail(
-                        case.case_id,
-                        case.polarity,
-                        ErrorCode.QTY_SILENT_DEFAULT,
-                        "omit or " + ",".join(str(item) for item in gold.accept_qty),
-                        str(found.qty_per),
+            for found in grouped.get(gold.match_key, []):
+                if found.qty_per not in gold.accept_qty:
+                    failures.append(
+                        _fail(
+                            case.case_id,
+                            case.polarity,
+                            ErrorCode.QTY_SILENT_DEFAULT,
+                            "omit or " + ",".join(str(item) for item in gold.accept_qty),
+                            str(found.qty_per),
+                        )
                     )
-                )
         outcomes.append(_case(case.case_id, case.polarity, failures))
     details = {
         "precision": _rate(true_positive, pred_n),
@@ -682,6 +786,16 @@ def score_cost(
                         f"data_missing={pred.data_missing} total={pred.total_project_value}",
                     )
                 )
+        if pred.currency != case.currency:
+            failures.append(
+                _fail(
+                    case.case_id,
+                    case.polarity,
+                    ErrorCode.COST_MISMATCH,
+                    case.currency,
+                    str(pred.currency),
+                )
+            )
         if not _money_equal(pred.piece_price, case.piece_price) or not _money_equal(pred.nre_total, case.nre_total):
             failures.append(
                 _fail(
@@ -693,9 +807,7 @@ def score_cost(
                 )
             )
         if not case.expect_data_missing and (
-            not _money_equal(pred.total_project_value, case.total_project_value)
-            or pred.currency != case.currency
-            or pred.data_missing
+            not _money_equal(pred.total_project_value, case.total_project_value) or pred.data_missing
         ):
             failures.append(
                 _fail(

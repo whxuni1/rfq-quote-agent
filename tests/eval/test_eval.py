@@ -4,6 +4,7 @@ Product gates are expected to fail closed on this repository. Scorer tests use
 an in-memory echo of the labels and never write that echo into the regression report.
 """
 
+import json
 from decimal import Decimal
 from pathlib import Path
 
@@ -11,17 +12,22 @@ import pytest
 from pydantic import ValidationError
 from tests.eval.echo import EchoAdapter
 
+from rfq_eval.__main__ import main
 from rfq_eval.adapt import AdapterSchemaError, ProductAdapter, map_bom, map_spec
 from rfq_eval.case_library import build_dataset
-from rfq_eval.dataset_io import dataset_sha256, load_dataset, materialize
-from rfq_eval.dataset_qa import qa_passed, run_dataset_qa
+from rfq_eval.dataset_io import dataset_sha256, load_dataset, load_or_materialize, materialize
+from rfq_eval.dataset_qa import _price_card, qa_passed, run_dataset_qa
 from rfq_eval.label_audit import piece_price, project_value
-from rfq_eval.metrics import score_isolation
-from rfq_eval.runner import evaluate
+from rfq_eval.metrics import score_bom, score_citations, score_cost, score_isolation, suite_satisfied
+from rfq_eval.runner import _MAXIMUMS, _MINIMUMS, evaluate
 from rfq_eval.schema import (
+    CitationPrediction,
+    DocumentPrediction,
+    EvalDataset,
     EvaluationReport,
     GateResult,
     IsolationPrediction,
+    PriceCard,
 )
 from rfq_eval.stats import wilson_interval
 from rfq_eval.taxonomy import ErrorCode, taxonomy
@@ -265,9 +271,220 @@ def test_report_schema_rejects_a_ready_flag_that_disagrees(tmp_path: Path) -> No
 def test_committed_dataset_matches_generator() -> None:
     root = Path(__file__).resolve().parents[2]
     if not (root / "eval" / "dataset" / "manifest.json").exists():
-        pytest.skip("dataset is materialized by the eval command")
+        pytest.skip("persisted dataset is absent")
     assert load_dataset(root / "eval" / "dataset") == build_dataset()
     stored = (root / "eval" / "reports" / "regression_report.json").read_text(encoding="utf-8")
     loaded = EvaluationReport.model_validate_json(stored)
     assert loaded.production_ready is False
     assert loaded.versions.dataset_sha256 == dataset_sha256(build_dataset())
+
+
+def _echo_documents(dataset: EvalDataset) -> dict[str, DocumentPrediction]:
+    adapter = EchoAdapter()
+    return {
+        case.case_id: adapter.predict_document(case, Path("a.pdf"), Path("a.xlsx"))
+        for case in dataset.documents
+    }
+
+
+def test_persisted_labels_survive_a_default_load(tmp_path: Path) -> None:
+    root = tmp_path / "dataset"
+    materialize(build_dataset(), root)
+    document = root / "documents" / "nom-cockpit-core.json"
+    payload = json.loads(document.read_text(encoding="utf-8"))
+    payload["project_name"] = "Corrected Label"
+    document.write_text(json.dumps(payload), encoding="utf-8")
+    loaded = load_or_materialize(root)
+    cockpit = next(case for case in loaded.documents if case.case_id == "nom-cockpit-core")
+    assert cockpit.project_name == "Corrected Label"
+    assert json.loads(document.read_text(encoding="utf-8"))["project_name"] == "Corrected Label"
+
+
+def test_malformed_labels_are_not_regenerated(tmp_path: Path) -> None:
+    root = tmp_path / "dataset"
+    materialize(build_dataset(), root)
+    manifest = root / "manifest.json"
+    manifest.write_text("{", encoding="utf-8")
+    with pytest.raises(json.JSONDecodeError):
+        load_or_materialize(root)
+    assert manifest.read_text(encoding="utf-8") == "{"
+
+
+def test_first_run_materializes_and_regenerate_restores(tmp_path: Path) -> None:
+    root = tmp_path / "dataset"
+    created = load_or_materialize(root)
+    assert created == build_dataset()
+    document = root / "documents" / "nom-cockpit-core.json"
+    payload = json.loads(document.read_text(encoding="utf-8"))
+    payload["project_name"] = "Corrected Label"
+    document.write_text(json.dumps(payload), encoding="utf-8")
+    restored = load_or_materialize(root, regenerate=True)
+    assert restored == build_dataset()
+
+
+def test_cli_does_not_rewrite_labels_when_writing_a_report(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    root = tmp_path / "dataset"
+    materialize(build_dataset(), root)
+    document = root / "documents" / "nom-cockpit-core.json"
+    payload = json.loads(document.read_text(encoding="utf-8"))
+    payload["project_name"] = "Corrected Label"
+    document.write_text(json.dumps(payload), encoding="utf-8")
+    monkeypatch.setattr("rfq_eval.dataset_io.dataset_dir", lambda: root)
+    code = main(["--out", str(tmp_path / "out")])
+    assert code == 0
+    assert json.loads(document.read_text(encoding="utf-8"))["project_name"] == "Corrected Label"
+    report = EvaluationReport.model_validate_json(
+        (tmp_path / "out" / "reports" / "regression_report.json").read_text(encoding="utf-8")
+    )
+    assert report.versions.dataset_sha256 != dataset_sha256(build_dataset())
+    assert report.production_ready is False
+
+
+def test_hierarchy_must_be_exact_for_review() -> None:
+    dataset = build_dataset()
+    predictions = _echo_documents(dataset)
+    clean = score_bom(dataset.documents, predictions)
+    assert _MINIMUMS["bom_identification"]["hierarchy_accuracy"] == Decimal("1")
+    assert suite_satisfied(
+        clean,
+        minimums=_MINIMUMS["bom_identification"],
+        maximums={},
+        zero_tolerance=False,
+    )
+    cockpit = predictions["nom-cockpit-core"]
+    assert cockpit.bom_lines is not None
+    child = next(line for line in cockpit.bom_lines if line.parent_match_key is not None)
+    changed = child.model_copy(update={"parent_match_key": "NO-SUCH-PARENT"})
+    lines = [changed if line.match_key == child.match_key else line for line in cockpit.bom_lines]
+    predictions["nom-cockpit-core"] = cockpit.model_copy(update={"bom_lines": lines})
+    score = score_bom(dataset.documents, predictions)
+    assert Decimal(score.details["hierarchy_accuracy"]) < Decimal("1")
+    assert any(
+        failure.error_code == ErrorCode.HIERARCHY_ERROR
+        for case in score.cases
+        if case.case_id == "nom-cockpit-core"
+        for failure in case.failures
+    )
+    assert not suite_satisfied(
+        score,
+        minimums=_MINIMUMS["bom_identification"],
+        maximums={},
+        zero_tolerance=False,
+    )
+
+
+def test_duplicate_bom_lines_fail_precision() -> None:
+    dataset = build_dataset()
+    predictions = _echo_documents(dataset)
+    cockpit = predictions["nom-cockpit-core"]
+    assert cockpit.bom_lines is not None
+    doubled = list(cockpit.bom_lines) + list(cockpit.bom_lines)
+    predictions["nom-cockpit-core"] = cockpit.model_copy(update={"bom_lines": doubled})
+    score = score_bom(dataset.documents, predictions)
+    assert Decimal(score.details["precision"]) < Decimal("0.98")
+    assert any(
+        failure.error_code == ErrorCode.BOM_FALSE_POSITIVE
+        for case in score.cases
+        if case.case_id == "nom-cockpit-core"
+        for failure in case.failures
+    )
+    assert not suite_satisfied(
+        score,
+        minimums=_MINIMUMS["bom_identification"],
+        maximums={},
+        zero_tolerance=False,
+    )
+
+
+def test_missing_volume_still_checks_currency() -> None:
+    dataset = build_dataset()
+    adapter = EchoAdapter()
+    predictions = {case.case_id: adapter.predict_cost(case) for case in dataset.costs}
+    clean = score_cost(dataset.costs, predictions)
+    assert suite_satisfied(
+        clean,
+        minimums=_MINIMUMS["cost_calculation"],
+        maximums={},
+        zero_tolerance=True,
+    )
+    missing = predictions["cost-missing-volume"].model_copy(update={"currency": "USD"})
+    predictions["cost-missing-volume"] = missing
+    score = score_cost(dataset.costs, predictions)
+    assert any(
+        failure.error_code == ErrorCode.COST_MISMATCH and failure.actual == "USD"
+        for case in score.cases
+        if case.case_id == "cost-missing-volume"
+        for failure in case.failures
+    )
+    assert not suite_satisfied(
+        score,
+        minimums=_MINIMUMS["cost_calculation"],
+        maximums={},
+        zero_tolerance=True,
+    )
+
+
+def test_fabricated_sheet_locator_is_unsupported() -> None:
+    dataset = build_dataset()
+    case = next(item for item in dataset.documents if item.case_id == "nom-cockpit-core")
+    prediction = EchoAdapter().predict_document(case, Path("a.pdf"), Path("a.xlsx"))
+    assert prediction.citations is not None
+    citations = [
+        *prediction.citations,
+        CitationPrediction(
+            claim_path="fabricated",
+            quote="物料号",
+            locator="sheet:NO_SUCH_SHEET!ZZ999",
+            file_role="bom_xlsx",
+        ),
+        CitationPrediction(
+            claim_path="header",
+            quote="物料号",
+            locator="sheet:BOM!B1",
+            file_role="bom_xlsx",
+        ),
+    ]
+    score = score_citations([case], {case.case_id: prediction.model_copy(update={"citations": citations})})
+    assert Decimal(score.details["unsupported_citation_rate"]) > Decimal("0.01")
+    assert any(failure.error_code == ErrorCode.CITATION_UNSUPPORTED for item in score.cases for failure in item.failures)
+    assert not any("sheet:BOM!B1" in failure.actual for item in score.cases for failure in item.failures)
+    assert not suite_satisfied(
+        score,
+        minimums=_MINIMUMS["citation_fidelity"],
+        maximums=_MAXIMUMS["citation_fidelity"],
+        zero_tolerance=False,
+    )
+
+
+def test_price_card_accepts_valid_entries_and_rejects_bad_ones(tmp_path: Path) -> None:
+    empty = build_dataset()
+    assert _price_card(empty).passed
+    assert _price_card(empty).observed == "unpriced"
+    valid = empty.model_copy(
+        update={
+            "price_card": PriceCard(
+                currency="USD",
+                note="versioned test prices",
+                models={"test-model": {"input_per_million": Decimal("1.5"), "output_per_million": Decimal("2")}},
+            )
+        }
+    )
+    assert _price_card(valid).passed
+    negative = empty.model_copy(
+        update={
+            "price_card": PriceCard(
+                currency="USD",
+                note="bad prices",
+                models={"test-model": {"input_per_million": Decimal("-1"), "output_per_million": Decimal("2")}},
+            )
+        }
+    )
+    assert not _price_card(negative).passed
+    with pytest.raises(ValidationError):
+        PriceCard.model_validate(
+            {"currency": "USD", "note": "float", "models": {"test-model": {"input_per_million": 1.5}}}
+        )
+    report, _failures = evaluate(valid, ProductAdapter(), tmp_path)
+    assert next(item for item in report.dataset_qa if item.check_id == "price_card").passed
+    extraction = next(gate for gate in report.gates if gate.gate_id == "document_extraction")
+    assert "dataset QA failed" not in extraction.limitation

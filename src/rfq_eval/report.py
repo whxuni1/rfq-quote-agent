@@ -64,7 +64,7 @@ python -m rfq_eval
 pytest
 ```
 
-The command reloads `eval/dataset`, rebuilds the text PDFs and workbooks, probes `rfq_agent`, and overwrites this report. Dataset QA failures withhold product scores.
+The command loads the persisted labels in `eval/dataset`. It rewrites that directory only with `--regenerate`, or on a first run when no manifest is present. It then rebuilds the text PDFs and workbooks, probes `rfq_agent`, and overwrites this report. Dataset QA failures withhold product scores.
 
 ## Run
 

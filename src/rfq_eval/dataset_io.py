@@ -21,6 +21,19 @@ def dataset_sha256(dataset: EvalDataset) -> str:
     return hashlib.sha256(canonical_json(dataset).encode("utf-8")).hexdigest()
 
 
+def load_or_materialize(directory: Path | None = None, *, regenerate: bool = False) -> EvalDataset:
+    """Load persisted labels.
+
+    Regeneration is explicit. A directory with no manifest is a first run and
+    is written from the generator. An existing manifest is never replaced,
+    including when it is malformed.
+    """
+    root = directory if directory is not None else dataset_dir()
+    if regenerate or not (root / "manifest.json").is_file():
+        materialize(directory=root)
+    return load_dataset(root)
+
+
 def materialize(dataset: EvalDataset | None = None, directory: Path | None = None) -> Path:
     source = dataset if dataset is not None else build_dataset()
     root = directory if directory is not None else dataset_dir()

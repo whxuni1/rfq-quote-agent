@@ -250,12 +250,29 @@ def _controls(dataset: EvalDataset) -> DatasetQAItem:
 
 
 def _price_card(dataset: EvalDataset) -> DatasetQAItem:
-    empty = dataset.price_card.models == {}
+    models = dataset.price_card.models
+    if not models:
+        return _item(
+            "price_card",
+            True,
+            "unpriced",
+            "An empty card leaves USD per RFQ unmeasured. No vendor price is invented.",
+        )
+    problems: list[str] = []
+    for model_id, prices in models.items():
+        if not model_id.strip():
+            problems.append("blank model id")
+        for key in ("input_per_million", "output_per_million"):
+            amount = prices.get(key)
+            if amount is None:
+                problems.append(f"{model_id} missing {key}")
+            elif amount < 0:
+                problems.append(f"{model_id} {key} < 0")
     return _item(
-        "price_card_empty",
-        empty,
-        f"models={list(dataset.price_card.models)}",
-        "No vendor price is invented. USD per RFQ stays unmeasured.",
+        "price_card",
+        not problems,
+        "ok" if not problems else "; ".join(problems),
+        "A populated card is accepted when every model has non-negative input_per_million and output_per_million.",
     )
 
 
