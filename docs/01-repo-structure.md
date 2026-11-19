@@ -13,7 +13,8 @@ rfq-quote-agent/
 ├── docs/
 │   ├── 00-architecture.md
 │   ├── 01-repo-structure.md
-│   └── 02-shared-schemas.md
+│   ├── 02-shared-schemas.md
+│   └── 03-enterprise-work-graph.md  # 设计提案，非任务实现
 ├── tasks/
 │   └── 10..40-*.md
 ├── src/rfq_agent/
