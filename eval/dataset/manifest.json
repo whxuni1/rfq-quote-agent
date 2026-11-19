@@ -1,0 +1,8 @@
+{
+  "dataset_version": "2026.11.19",
+  "synthetic": true,
+  "description": "Synthetic labeled RFQs for review of extraction, BOM identity, units, missing-information flags, citations, cost rollup, review routing, failure recovery, customer isolation, and latency accounting. Not production traffic. Scanned PDFs and OCR are out of scope.",
+  "production_min_independent_cases": 73,
+  "ocr_in_scope": false,
+  "scanned_pdf_in_scope": false
+}

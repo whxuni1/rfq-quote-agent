@@ -1,0 +1,209 @@
+{
+  "case_id": "nom-harness-usd",
+  "polarity": "nominal",
+  "synthetic": true,
+  "customer_id": "APTIV-HRN",
+  "customer_name": "安波福",
+  "project_name": "Body Harness",
+  "notes": "Meters are the correct unit for wire. This must not be flagged as an ambiguous unit.",
+  "sections": [
+    {
+      "title": "项目概述",
+      "paragraphs": [
+        "客户：安波福",
+        "客户编号：APTIV-HRN",
+        "项目：Body Harness"
+      ],
+      "tables": []
+    },
+    {
+      "title": "数量与商务",
+      "paragraphs": [
+        "年用量 50000 套",
+        "项目寿命 4 年",
+        "峰值月需求 5000",
+        "币种 USD",
+        "贸易术语 EXW Suzhou",
+        "付款条件 Net 45",
+        "保修 12 个月",
+        "线束按米计价，单位 M 为正确单位"
+      ],
+      "tables": [
+        [
+          [
+            "参数",
+            "要求"
+          ],
+          [
+            "工作温度",
+            "-40~125C"
+          ]
+        ]
+      ]
+    },
+    {
+      "title": "质量",
+      "paragraphs": [
+        "质量体系 IATF 16949"
+      ],
+      "tables": []
+    }
+  ],
+  "sheets": [
+    {
+      "name": "BOM",
+      "headers": [
+        "Level",
+        "Part No",
+        "Parent",
+        "Description",
+        "Qty",
+        "UOM",
+        "Manufacturer"
+      ],
+      "rows": [
+        [
+          "0",
+          "HRN-ASM",
+          "",
+          "Body Harness",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "WIRE-001",
+          "HRN-ASM",
+          "Signal wire",
+          "2.5",
+          "M",
+          ""
+        ],
+        [
+          "1",
+          "CON-HRN",
+          "HRN-ASM",
+          "Harness connector",
+          "2",
+          "EA",
+          ""
+        ]
+      ],
+      "role": "bom"
+    }
+  ],
+  "fields": [
+    {
+      "path": "customer",
+      "value": "安波福",
+      "quote": "客户：安波福",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_name",
+      "value": "Body Harness",
+      "quote": "项目：Body Harness",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "annual_volume",
+      "value": "50000",
+      "quote": "年用量 50000 套",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_life_years",
+      "value": "4",
+      "quote": "项目寿命 4 年",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "peak_monthly_volume",
+      "value": "5000",
+      "quote": "峰值月需求 5000",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "currency",
+      "value": "USD",
+      "quote": "币种 USD",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "incoterm",
+      "value": "EXW Suzhou",
+      "quote": "贸易术语 EXW Suzhou",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "payment_terms",
+      "value": "Net 45",
+      "quote": "付款条件 Net 45",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "warranty_months",
+      "value": "12",
+      "quote": "保修 12 个月",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "quality_standard",
+      "value": "IATF 16949",
+      "quote": "质量体系 IATF 16949",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    }
+  ],
+  "bom": [
+    {
+      "match_key": "HRN-ASM",
+      "part_no": "HRN-ASM",
+      "description": "Body Harness",
+      "level": 0,
+      "parent_match_key": null,
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "WIRE-001",
+      "part_no": "WIRE-001",
+      "description": "Signal wire",
+      "level": 1,
+      "parent_match_key": "HRN-ASM",
+      "qty_per": "2.5",
+      "uom": "M",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "CON-HRN",
+      "part_no": "CON-HRN",
+      "description": "Harness connector",
+      "level": 1,
+      "parent_match_key": "HRN-ASM",
+      "qty_per": "2",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    }
+  ],
+  "flags": [],
+  "expect_parse_error": false,
+  "accept_full_rejection": false,
+  "forbidden_part_nos": [],
+  "injection": null,
+  "primary_currency": "USD"
+}

@@ -1,0 +1,374 @@
+[
+  {
+    "case_id": "gate-none",
+    "polarity": "nominal",
+    "notes": "Benign board. No gate.",
+    "facts": {
+      "margin_floor_breached": false,
+      "proposed_margin_pct": "0.15",
+      "margin_floor_pct": "0.08",
+      "single_source_classes": [],
+      "spec_gap_high": false,
+      "nre_total": "10000",
+      "nre_threshold": "500000",
+      "warranty_months": 24,
+      "warranty_standard_months": 36,
+      "term_gap_critical": false,
+      "ambiguity_high_unresolved": false,
+      "missing_reports": []
+    },
+    "expected_gate_types": [],
+    "expect_single_packet": false
+  },
+  {
+    "case_id": "gate-margin-flag",
+    "polarity": "nominal",
+    "notes": "The finance report already marks the floor as breached.",
+    "facts": {
+      "margin_floor_breached": true,
+      "proposed_margin_pct": "0.15",
+      "margin_floor_pct": "0.08",
+      "single_source_classes": [],
+      "spec_gap_high": false,
+      "nre_total": "10000",
+      "nre_threshold": "500000",
+      "warranty_months": 24,
+      "warranty_standard_months": 36,
+      "term_gap_critical": false,
+      "ambiguity_high_unresolved": false,
+      "missing_reports": []
+    },
+    "expected_gate_types": [
+      "MARGIN_FLOOR_BREACH"
+    ],
+    "expect_single_packet": true
+  },
+  {
+    "case_id": "gate-margin-below",
+    "polarity": "nominal",
+    "notes": "Proposed margin is below the floor even when the boolean is false.",
+    "facts": {
+      "margin_floor_breached": false,
+      "proposed_margin_pct": "0.0799",
+      "margin_floor_pct": "0.08",
+      "single_source_classes": [],
+      "spec_gap_high": false,
+      "nre_total": "10000",
+      "nre_threshold": "500000",
+      "warranty_months": 24,
+      "warranty_standard_months": 36,
+      "term_gap_critical": false,
+      "ambiguity_high_unresolved": false,
+      "missing_reports": []
+    },
+    "expected_gate_types": [
+      "MARGIN_FLOOR_BREACH"
+    ],
+    "expect_single_packet": true
+  },
+  {
+    "case_id": "gate-margin-at-floor",
+    "polarity": "negative",
+    "notes": "Equal to the floor does not trigger. The rule is strict less-than.",
+    "facts": {
+      "margin_floor_breached": false,
+      "proposed_margin_pct": "0.08",
+      "margin_floor_pct": "0.08",
+      "single_source_classes": [],
+      "spec_gap_high": false,
+      "nre_total": "10000",
+      "nre_threshold": "500000",
+      "warranty_months": 24,
+      "warranty_standard_months": 36,
+      "term_gap_critical": false,
+      "ambiguity_high_unresolved": false,
+      "missing_reports": []
+    },
+    "expected_gate_types": [],
+    "expect_single_packet": false
+  },
+  {
+    "case_id": "gate-connector-single",
+    "polarity": "negative",
+    "notes": "A single-source connector is not in the critical class list.",
+    "facts": {
+      "margin_floor_breached": false,
+      "proposed_margin_pct": "0.15",
+      "margin_floor_pct": "0.08",
+      "single_source_classes": [
+        "CONNECTOR"
+      ],
+      "spec_gap_high": false,
+      "nre_total": "10000",
+      "nre_threshold": "500000",
+      "warranty_months": 24,
+      "warranty_standard_months": 36,
+      "term_gap_critical": false,
+      "ambiguity_high_unresolved": false,
+      "missing_reports": []
+    },
+    "expected_gate_types": [],
+    "expect_single_packet": false
+  },
+  {
+    "case_id": "gate-soc-single",
+    "polarity": "nominal",
+    "notes": "Single-source SoC.",
+    "facts": {
+      "margin_floor_breached": false,
+      "proposed_margin_pct": "0.15",
+      "margin_floor_pct": "0.08",
+      "single_source_classes": [
+        "SOC"
+      ],
+      "spec_gap_high": false,
+      "nre_total": "10000",
+      "nre_threshold": "500000",
+      "warranty_months": 24,
+      "warranty_standard_months": 36,
+      "term_gap_critical": false,
+      "ambiguity_high_unresolved": false,
+      "missing_reports": []
+    },
+    "expected_gate_types": [
+      "SINGLE_SOURCE_CRITICAL"
+    ],
+    "expect_single_packet": true
+  },
+  {
+    "case_id": "gate-spec-gap",
+    "polarity": "nominal",
+    "notes": "High spec gap.",
+    "facts": {
+      "margin_floor_breached": false,
+      "proposed_margin_pct": "0.15",
+      "margin_floor_pct": "0.08",
+      "single_source_classes": [],
+      "spec_gap_high": true,
+      "nre_total": "10000",
+      "nre_threshold": "500000",
+      "warranty_months": 24,
+      "warranty_standard_months": 36,
+      "term_gap_critical": false,
+      "ambiguity_high_unresolved": false,
+      "missing_reports": []
+    },
+    "expected_gate_types": [
+      "SPEC_GAP_HIGH"
+    ],
+    "expect_single_packet": true
+  },
+  {
+    "case_id": "gate-nre-equal",
+    "polarity": "negative",
+    "notes": "NRE equal to the 500000 threshold does not trigger.",
+    "facts": {
+      "margin_floor_breached": false,
+      "proposed_margin_pct": "0.15",
+      "margin_floor_pct": "0.08",
+      "single_source_classes": [],
+      "spec_gap_high": false,
+      "nre_total": "500000",
+      "nre_threshold": "500000",
+      "warranty_months": 24,
+      "warranty_standard_months": 36,
+      "term_gap_critical": false,
+      "ambiguity_high_unresolved": false,
+      "missing_reports": []
+    },
+    "expected_gate_types": [],
+    "expect_single_packet": false
+  },
+  {
+    "case_id": "gate-nre-over",
+    "polarity": "nominal",
+    "notes": "NRE one ten-thousandth above the threshold triggers.",
+    "facts": {
+      "margin_floor_breached": false,
+      "proposed_margin_pct": "0.15",
+      "margin_floor_pct": "0.08",
+      "single_source_classes": [],
+      "spec_gap_high": false,
+      "nre_total": "500000.0001",
+      "nre_threshold": "500000",
+      "warranty_months": 24,
+      "warranty_standard_months": 36,
+      "term_gap_critical": false,
+      "ambiguity_high_unresolved": false,
+      "missing_reports": []
+    },
+    "expected_gate_types": [
+      "NRE_SCOPE_LARGE"
+    ],
+    "expect_single_packet": true
+  },
+  {
+    "case_id": "gate-warranty-36",
+    "polarity": "negative",
+    "notes": "36 months is the standard warranty and does not trigger.",
+    "facts": {
+      "margin_floor_breached": false,
+      "proposed_margin_pct": "0.15",
+      "margin_floor_pct": "0.08",
+      "single_source_classes": [],
+      "spec_gap_high": false,
+      "nre_total": "10000",
+      "nre_threshold": "500000",
+      "warranty_months": 36,
+      "warranty_standard_months": 36,
+      "term_gap_critical": false,
+      "ambiguity_high_unresolved": false,
+      "missing_reports": []
+    },
+    "expected_gate_types": [],
+    "expect_single_packet": false
+  },
+  {
+    "case_id": "gate-warranty-37",
+    "polarity": "nominal",
+    "notes": "37 months exceeds the 36 month standard.",
+    "facts": {
+      "margin_floor_breached": false,
+      "proposed_margin_pct": "0.15",
+      "margin_floor_pct": "0.08",
+      "single_source_classes": [],
+      "spec_gap_high": false,
+      "nre_total": "10000",
+      "nre_threshold": "500000",
+      "warranty_months": 37,
+      "warranty_standard_months": 36,
+      "term_gap_critical": false,
+      "ambiguity_high_unresolved": false,
+      "missing_reports": []
+    },
+    "expected_gate_types": [
+      "WARRANTY_BEYOND_STANDARD"
+    ],
+    "expect_single_packet": true
+  },
+  {
+    "case_id": "gate-term",
+    "polarity": "nominal",
+    "notes": "Critical term gap.",
+    "facts": {
+      "margin_floor_breached": false,
+      "proposed_margin_pct": "0.15",
+      "margin_floor_pct": "0.08",
+      "single_source_classes": [],
+      "spec_gap_high": false,
+      "nre_total": "10000",
+      "nre_threshold": "500000",
+      "warranty_months": 24,
+      "warranty_standard_months": 36,
+      "term_gap_critical": true,
+      "ambiguity_high_unresolved": false,
+      "missing_reports": []
+    },
+    "expected_gate_types": [
+      "TERM_GAP_CRITICAL"
+    ],
+    "expect_single_packet": true
+  },
+  {
+    "case_id": "gate-ambiguity",
+    "polarity": "nominal",
+    "notes": "Unresolved high ingestion ambiguity.",
+    "facts": {
+      "margin_floor_breached": false,
+      "proposed_margin_pct": "0.15",
+      "margin_floor_pct": "0.08",
+      "single_source_classes": [],
+      "spec_gap_high": false,
+      "nre_total": "10000",
+      "nre_threshold": "500000",
+      "warranty_months": 24,
+      "warranty_standard_months": 36,
+      "term_gap_critical": false,
+      "ambiguity_high_unresolved": true,
+      "missing_reports": []
+    },
+    "expected_gate_types": [
+      "INGESTION_AMBIGUITY_HIGH"
+    ],
+    "expect_single_packet": true
+  },
+  {
+    "case_id": "gate-data-missing",
+    "polarity": "negative",
+    "notes": "Engineering report is missing.",
+    "facts": {
+      "margin_floor_breached": false,
+      "proposed_margin_pct": "0.15",
+      "margin_floor_pct": "0.08",
+      "single_source_classes": [],
+      "spec_gap_high": false,
+      "nre_total": "10000",
+      "nre_threshold": "500000",
+      "warranty_months": 24,
+      "warranty_standard_months": 36,
+      "term_gap_critical": false,
+      "ambiguity_high_unresolved": false,
+      "missing_reports": [
+        "engineering"
+      ]
+    },
+    "expected_gate_types": [
+      "DATA_MISSING"
+    ],
+    "expect_single_packet": true
+  },
+  {
+    "case_id": "gate-display-camera",
+    "polarity": "nominal",
+    "notes": "Display and camera are one gate type, not two packets.",
+    "facts": {
+      "margin_floor_breached": false,
+      "proposed_margin_pct": "0.15",
+      "margin_floor_pct": "0.08",
+      "single_source_classes": [
+        "DISPLAY",
+        "CAMERA"
+      ],
+      "spec_gap_high": false,
+      "nre_total": "10000",
+      "nre_threshold": "500000",
+      "warranty_months": 24,
+      "warranty_standard_months": 36,
+      "term_gap_critical": false,
+      "ambiguity_high_unresolved": false,
+      "missing_reports": []
+    },
+    "expected_gate_types": [
+      "SINGLE_SOURCE_CRITICAL"
+    ],
+    "expect_single_packet": true
+  },
+  {
+    "case_id": "gate-combo",
+    "polarity": "adversarial",
+    "notes": "Four gates fire together and must be one packet.",
+    "facts": {
+      "margin_floor_breached": true,
+      "proposed_margin_pct": "0.15",
+      "margin_floor_pct": "0.08",
+      "single_source_classes": [
+        "SOC"
+      ],
+      "spec_gap_high": false,
+      "nre_total": "10000",
+      "nre_threshold": "500000",
+      "warranty_months": 48,
+      "warranty_standard_months": 36,
+      "term_gap_critical": true,
+      "ambiguity_high_unresolved": false,
+      "missing_reports": []
+    },
+    "expected_gate_types": [
+      "MARGIN_FLOOR_BREACH",
+      "SINGLE_SOURCE_CRITICAL",
+      "WARRANTY_BEYOND_STANDARD",
+      "TERM_GAP_CRITICAL"
+    ],
+    "expect_single_packet": true
+  }
+]

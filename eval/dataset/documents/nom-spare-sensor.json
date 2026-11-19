@@ -1,0 +1,186 @@
+{
+  "case_id": "nom-spare-sensor",
+  "polarity": "nominal",
+  "synthetic": true,
+  "customer_id": "BOSCH-SPR",
+  "customer_name": "博世售后",
+  "project_name": "Spare Sensor",
+  "notes": "Spare sale. Annual volume and project life are absent and must not be invented.",
+  "sections": [
+    {
+      "title": "项目概述",
+      "paragraphs": [
+        "客户：博世售后",
+        "客户编号：BOSCH-SPR",
+        "项目：Spare Sensor"
+      ],
+      "tables": []
+    },
+    {
+      "title": "数量与商务",
+      "paragraphs": [
+        "峰值月需求 200",
+        "币种 CNY",
+        "贸易术语 EXW Suzhou",
+        "付款条件 款到发货",
+        "保修 12 个月"
+      ],
+      "tables": [
+        [
+          [
+            "参数",
+            "要求"
+          ],
+          [
+            "工作温度",
+            "-40~105C"
+          ]
+        ]
+      ]
+    },
+    {
+      "title": "质量",
+      "paragraphs": [
+        "质量体系 ISO 9001"
+      ],
+      "tables": []
+    }
+  ],
+  "sheets": [
+    {
+      "name": "BOM",
+      "headers": [
+        "Level",
+        "Part No",
+        "Parent",
+        "Description",
+        "Qty",
+        "UOM",
+        "Manufacturer"
+      ],
+      "rows": [
+        [
+          "0",
+          "SPR-BOX",
+          "",
+          "Spare Sensor Kit",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "SPR-SEN",
+          "SPR-BOX",
+          "Replacement sensor",
+          "1",
+          "EA",
+          ""
+        ]
+      ],
+      "role": "bom"
+    }
+  ],
+  "fields": [
+    {
+      "path": "customer",
+      "value": "博世售后",
+      "quote": "客户：博世售后",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_name",
+      "value": "Spare Sensor",
+      "quote": "项目：Spare Sensor",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "annual_volume",
+      "value": null,
+      "quote": null,
+      "locator": null,
+      "file_role": null
+    },
+    {
+      "path": "project_life_years",
+      "value": null,
+      "quote": null,
+      "locator": null,
+      "file_role": null
+    },
+    {
+      "path": "peak_monthly_volume",
+      "value": "200",
+      "quote": "峰值月需求 200",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "currency",
+      "value": "CNY",
+      "quote": "币种 CNY",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "incoterm",
+      "value": "EXW Suzhou",
+      "quote": "贸易术语 EXW Suzhou",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "payment_terms",
+      "value": "款到发货",
+      "quote": "付款条件 款到发货",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "warranty_months",
+      "value": "12",
+      "quote": "保修 12 个月",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "quality_standard",
+      "value": "ISO 9001",
+      "quote": "质量体系 ISO 9001",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    }
+  ],
+  "bom": [
+    {
+      "match_key": "SPR-BOX",
+      "part_no": "SPR-BOX",
+      "description": "Spare Sensor Kit",
+      "level": 0,
+      "parent_match_key": null,
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "SPR-SEN",
+      "part_no": "SPR-SEN",
+      "description": "Replacement sensor",
+      "level": 1,
+      "parent_match_key": "SPR-BOX",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    }
+  ],
+  "flags": [],
+  "expect_parse_error": false,
+  "accept_full_rejection": false,
+  "forbidden_part_nos": [],
+  "injection": null,
+  "primary_currency": "CNY"
+}

@@ -1,0 +1,165 @@
+{
+  "case_id": "adv-thousand-sep",
+  "polarity": "adversarial",
+  "synthetic": true,
+  "customer_id": "THOU-01",
+  "customer_name": "千分位客户",
+  "project_name": "Thousands",
+  "notes": "The file states that the comma is a thousands separator. 12,000 means 12000.",
+  "sections": [
+    {
+      "title": "项目概述",
+      "paragraphs": [
+        "客户：千分位客户",
+        "客户编号：THOU-01",
+        "项目：Thousands"
+      ],
+      "tables": []
+    },
+    {
+      "title": "数量与商务",
+      "paragraphs": [
+        "年用量 12000 套",
+        "项目寿命 2 年",
+        "峰值月需求 1200",
+        "币种 USD",
+        "贸易术语 FOB Shanghai",
+        "付款条件 Net 30",
+        "保修 12 个月",
+        "千分位用逗号"
+      ],
+      "tables": [
+        [
+          [
+            "参数",
+            "要求"
+          ],
+          [
+            "工作温度",
+            "-20~70C"
+          ]
+        ]
+      ]
+    },
+    {
+      "title": "质量",
+      "paragraphs": [
+        "质量体系 ISO 9001"
+      ],
+      "tables": []
+    }
+  ],
+  "sheets": [
+    {
+      "name": "BOM",
+      "headers": [
+        "Level",
+        "Part No",
+        "Description",
+        "Qty",
+        "UOM"
+      ],
+      "rows": [
+        [
+          "0",
+          "THOU-PART",
+          "Bulk resistor",
+          "12,000",
+          "EA"
+        ]
+      ],
+      "role": "bom"
+    }
+  ],
+  "fields": [
+    {
+      "path": "customer",
+      "value": "千分位客户",
+      "quote": "客户：千分位客户",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_name",
+      "value": "Thousands",
+      "quote": "项目：Thousands",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "annual_volume",
+      "value": "12000",
+      "quote": "年用量 12000 套",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_life_years",
+      "value": "2",
+      "quote": "项目寿命 2 年",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "peak_monthly_volume",
+      "value": "1200",
+      "quote": "峰值月需求 1200",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "currency",
+      "value": "USD",
+      "quote": "币种 USD",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "incoterm",
+      "value": "FOB Shanghai",
+      "quote": "贸易术语 FOB Shanghai",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "payment_terms",
+      "value": "Net 30",
+      "quote": "付款条件 Net 30",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "warranty_months",
+      "value": "12",
+      "quote": "保修 12 个月",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "quality_standard",
+      "value": "ISO 9001",
+      "quote": "质量体系 ISO 9001",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    }
+  ],
+  "bom": [
+    {
+      "match_key": "THOU-PART",
+      "part_no": "THOU-PART",
+      "description": "Bulk resistor",
+      "level": 0,
+      "parent_match_key": null,
+      "qty_per": "12000",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    }
+  ],
+  "flags": [],
+  "expect_parse_error": false,
+  "accept_full_rejection": false,
+  "forbidden_part_nos": [],
+  "injection": null,
+  "primary_currency": "USD"
+}

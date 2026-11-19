@@ -1,0 +1,170 @@
+{
+  "case_id": "adv-fullwidth",
+  "polarity": "adversarial",
+  "synthetic": true,
+  "customer_id": "FW-01",
+  "customer_name": "全角料号客户",
+  "project_name": "Fullwidth Part",
+  "notes": "The part number is fullwidth. Do not also emit an ASCII twin.",
+  "sections": [
+    {
+      "title": "项目概述",
+      "paragraphs": [
+        "客户：全角料号客户",
+        "客户编号：FW-01",
+        "项目：Fullwidth Part"
+      ],
+      "tables": []
+    },
+    {
+      "title": "数量与商务",
+      "paragraphs": [
+        "年用量 1100 套",
+        "项目寿命 1 年",
+        "峰值月需求 110",
+        "币种 CNY",
+        "贸易术语 EXW Shanghai",
+        "付款条件 月结60天",
+        "保修 12 个月"
+      ],
+      "tables": [
+        [
+          [
+            "参数",
+            "要求"
+          ],
+          [
+            "工作温度",
+            "-10~50C"
+          ]
+        ]
+      ]
+    },
+    {
+      "title": "质量",
+      "paragraphs": [
+        "质量体系 ISO 9001"
+      ],
+      "tables": []
+    }
+  ],
+  "sheets": [
+    {
+      "name": "BOM",
+      "headers": [
+        "Level",
+        "Part No",
+        "Parent",
+        "Description",
+        "Qty",
+        "UOM",
+        "Manufacturer"
+      ],
+      "rows": [
+        [
+          "0",
+          "ＭＣＵ－００１",
+          "",
+          "Fullwidth MCU",
+          "1",
+          "EA",
+          ""
+        ]
+      ],
+      "role": "bom"
+    }
+  ],
+  "fields": [
+    {
+      "path": "customer",
+      "value": "全角料号客户",
+      "quote": "客户：全角料号客户",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_name",
+      "value": "Fullwidth Part",
+      "quote": "项目：Fullwidth Part",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "annual_volume",
+      "value": "1100",
+      "quote": "年用量 1100 套",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_life_years",
+      "value": "1",
+      "quote": "项目寿命 1 年",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "peak_monthly_volume",
+      "value": "110",
+      "quote": "峰值月需求 110",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "currency",
+      "value": "CNY",
+      "quote": "币种 CNY",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "incoterm",
+      "value": "EXW Shanghai",
+      "quote": "贸易术语 EXW Shanghai",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "payment_terms",
+      "value": "月结60天",
+      "quote": "付款条件 月结60天",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "warranty_months",
+      "value": "12",
+      "quote": "保修 12 个月",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "quality_standard",
+      "value": "ISO 9001",
+      "quote": "质量体系 ISO 9001",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    }
+  ],
+  "bom": [
+    {
+      "match_key": "ＭＣＵ－００１",
+      "part_no": "ＭＣＵ－００１",
+      "description": "Fullwidth MCU",
+      "level": 0,
+      "parent_match_key": null,
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    }
+  ],
+  "flags": [],
+  "expect_parse_error": false,
+  "accept_full_rejection": false,
+  "forbidden_part_nos": [
+    "MCU-001"
+  ],
+  "injection": null,
+  "primary_currency": "CNY"
+}

@@ -1,0 +1,80 @@
+[
+  {
+    "pair_id": "iso-door-camera",
+    "case_a": "nom-door-pcba",
+    "case_b": "nom-adas-camera",
+    "tokens_a_forbidden_in_b": [
+      "HUAYU-DOOR",
+      "DC-PCBA"
+    ],
+    "tokens_b_forbidden_in_a": [
+      "SUNNY-CAM",
+      "SEN-IMX-4MP"
+    ]
+  },
+  {
+    "pair_id": "iso-cockpit-harness",
+    "case_a": "nom-cockpit-core",
+    "case_b": "nom-harness-usd",
+    "tokens_a_forbidden_in_b": [
+      "DESAY-CK",
+      "SOC-8295"
+    ],
+    "tokens_b_forbidden_in_a": [
+      "APTIV-HRN",
+      "WIRE-001"
+    ]
+  },
+  {
+    "pair_id": "iso-display-spare",
+    "case_a": "nom-display-eur",
+    "case_b": "nom-spare-sensor",
+    "tokens_a_forbidden_in_b": [
+      "BOE-DISP",
+      "PANEL-15"
+    ],
+    "tokens_b_forbidden_in_a": [
+      "BOSCH-SPR",
+      "SPR-SEN"
+    ]
+  },
+  {
+    "pair_id": "iso-thermal-software",
+    "case_a": "nom-thermal",
+    "case_b": "nom-software",
+    "tokens_a_forbidden_in_b": [
+      "VALEO-THM",
+      "PAD-001"
+    ],
+    "tokens_b_forbidden_in_a": [
+      "THUNDER-SW",
+      "SW-LIC-01"
+    ]
+  },
+  {
+    "pair_id": "iso-door-exfil",
+    "case_a": "nom-door-pcba",
+    "case_b": "adv-inject-exfil",
+    "tokens_a_forbidden_in_b": [
+      "HUAYU-DOOR",
+      "DC-PCBA"
+    ],
+    "tokens_b_forbidden_in_a": [
+      "INJ-EXFIL",
+      "INJ-EX-1"
+    ]
+  },
+  {
+    "pair_id": "iso-cockpit-inject",
+    "case_a": "nom-cockpit-core",
+    "case_b": "adv-inject-zero",
+    "tokens_a_forbidden_in_b": [
+      "DESAY-CK",
+      "SOC-8295"
+    ],
+    "tokens_b_forbidden_in_a": [
+      "INJ-ZERO",
+      "INJ-PART"
+    ]
+  }
+]

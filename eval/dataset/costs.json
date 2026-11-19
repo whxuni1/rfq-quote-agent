@@ -1,0 +1,514 @@
+[
+  {
+    "case_id": "cost-single",
+    "polarity": "nominal",
+    "notes": "One leaf plus logistics.",
+    "currency": "CNY",
+    "leaves": [
+      {
+        "line_no": "L1",
+        "material_cost": "1.25",
+        "processing_cost": "0",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "1"
+      }
+    ],
+    "logistics": "0.25",
+    "nre_total": "100",
+    "annual_volume": "10",
+    "peak_monthly_volume": null,
+    "project_life_years": 2,
+    "piece_price": "1.5000",
+    "total_project_value": "130.0000",
+    "expect_data_missing": false
+  },
+  {
+    "case_id": "cost-chain",
+    "polarity": "nominal",
+    "notes": "Quantity chain is 3.",
+    "currency": "CNY",
+    "leaves": [
+      {
+        "line_no": "L1",
+        "material_cost": "2",
+        "processing_cost": "0",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "3"
+      }
+    ],
+    "logistics": "0",
+    "nre_total": "0",
+    "annual_volume": "1",
+    "peak_monthly_volume": null,
+    "project_life_years": 1,
+    "piece_price": "6.0000",
+    "total_project_value": "6.0000",
+    "expect_data_missing": false
+  },
+  {
+    "case_id": "cost-two-leaves",
+    "polarity": "nominal",
+    "notes": "Two leaves, logistics added once.",
+    "currency": "CNY",
+    "leaves": [
+      {
+        "line_no": "A",
+        "material_cost": "1",
+        "processing_cost": "0.5",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "2"
+      },
+      {
+        "line_no": "B",
+        "material_cost": "0.25",
+        "processing_cost": "0",
+        "overhead": "0.25",
+        "supplier_margin": "0",
+        "qty_per_chain": "4"
+      }
+    ],
+    "logistics": "1",
+    "nre_total": "50",
+    "annual_volume": "100",
+    "peak_monthly_volume": null,
+    "project_life_years": 3,
+    "piece_price": "6.0000",
+    "total_project_value": "1850.0000",
+    "expect_data_missing": false
+  },
+  {
+    "case_id": "cost-logistics",
+    "polarity": "nominal",
+    "notes": "Logistics is not multiplied by quantity.",
+    "currency": "CNY",
+    "leaves": [
+      {
+        "line_no": "L1",
+        "material_cost": "1",
+        "processing_cost": "0",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "1"
+      }
+    ],
+    "logistics": "8",
+    "nre_total": "0",
+    "annual_volume": "5",
+    "peak_monthly_volume": null,
+    "project_life_years": 1,
+    "piece_price": "9.0000",
+    "total_project_value": "45.0000",
+    "expect_data_missing": false
+  },
+  {
+    "case_id": "cost-zero-logistics",
+    "polarity": "nominal",
+    "notes": "Zero logistics.",
+    "currency": "CNY",
+    "leaves": [
+      {
+        "line_no": "L1",
+        "material_cost": "3",
+        "processing_cost": "1",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "1"
+      }
+    ],
+    "logistics": "0",
+    "nre_total": "10",
+    "annual_volume": "2",
+    "peak_monthly_volume": null,
+    "project_life_years": 4,
+    "piece_price": "4.0000",
+    "total_project_value": "42.0000",
+    "expect_data_missing": false
+  },
+  {
+    "case_id": "cost-half-qty",
+    "polarity": "nominal",
+    "notes": "Fractional quantity chain.",
+    "currency": "CNY",
+    "leaves": [
+      {
+        "line_no": "L1",
+        "material_cost": "2",
+        "processing_cost": "0",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "0.5"
+      }
+    ],
+    "logistics": "0",
+    "nre_total": "0",
+    "annual_volume": "10",
+    "peak_monthly_volume": null,
+    "project_life_years": 1,
+    "piece_price": "1.0000",
+    "total_project_value": "10.0000",
+    "expect_data_missing": false
+  },
+  {
+    "case_id": "cost-missing-volume",
+    "polarity": "negative",
+    "notes": "No annual volume and no peak. Total must be missing, not zero.",
+    "currency": "CNY",
+    "leaves": [
+      {
+        "line_no": "L1",
+        "material_cost": "4",
+        "processing_cost": "0",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "1"
+      }
+    ],
+    "logistics": "0",
+    "nre_total": "20",
+    "annual_volume": null,
+    "peak_monthly_volume": null,
+    "project_life_years": 5,
+    "piece_price": "4.0000",
+    "total_project_value": null,
+    "expect_data_missing": true
+  },
+  {
+    "case_id": "cost-peak-fallback",
+    "polarity": "nominal",
+    "notes": "Peak monthly 100 falls back to annual volume 1200.",
+    "currency": "CNY",
+    "leaves": [
+      {
+        "line_no": "L1",
+        "material_cost": "2",
+        "processing_cost": "0",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "3"
+      }
+    ],
+    "logistics": "0",
+    "nre_total": "0",
+    "annual_volume": null,
+    "peak_monthly_volume": "100",
+    "project_life_years": 1,
+    "piece_price": "6.0000",
+    "total_project_value": "7200.0000",
+    "expect_data_missing": false
+  },
+  {
+    "case_id": "cost-missing-life",
+    "polarity": "negative",
+    "notes": "Volume is known and project life is not. Total must be missing.",
+    "currency": "CNY",
+    "leaves": [
+      {
+        "line_no": "L1",
+        "material_cost": "1",
+        "processing_cost": "0",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "1"
+      }
+    ],
+    "logistics": "0",
+    "nre_total": "5",
+    "annual_volume": "10",
+    "peak_monthly_volume": null,
+    "project_life_years": null,
+    "piece_price": "1.0000",
+    "total_project_value": null,
+    "expect_data_missing": true
+  },
+  {
+    "case_id": "cost-large-volume",
+    "polarity": "nominal",
+    "notes": "Large annual volume.",
+    "currency": "CNY",
+    "leaves": [
+      {
+        "line_no": "L1",
+        "material_cost": "0.5",
+        "processing_cost": "0",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "2"
+      }
+    ],
+    "logistics": "0",
+    "nre_total": "0",
+    "annual_volume": "1000000",
+    "peak_monthly_volume": null,
+    "project_life_years": 1,
+    "piece_price": "1.0000",
+    "total_project_value": "1000000.0000",
+    "expect_data_missing": false
+  },
+  {
+    "case_id": "cost-high-nre",
+    "polarity": "nominal",
+    "notes": "NRE dominates a one-year program.",
+    "currency": "CNY",
+    "leaves": [
+      {
+        "line_no": "L1",
+        "material_cost": "1",
+        "processing_cost": "0",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "1"
+      }
+    ],
+    "logistics": "0",
+    "nre_total": "250000",
+    "annual_volume": "10",
+    "peak_monthly_volume": null,
+    "project_life_years": 1,
+    "piece_price": "1.0000",
+    "total_project_value": "250010.0000",
+    "expect_data_missing": false
+  },
+  {
+    "case_id": "cost-four-leaves",
+    "polarity": "nominal",
+    "notes": "Four leaves with different chains.",
+    "currency": "USD",
+    "leaves": [
+      {
+        "line_no": "A",
+        "material_cost": "1",
+        "processing_cost": "0",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "1"
+      },
+      {
+        "line_no": "B",
+        "material_cost": "1",
+        "processing_cost": "0",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "2"
+      },
+      {
+        "line_no": "C",
+        "material_cost": "1",
+        "processing_cost": "0",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "3"
+      },
+      {
+        "line_no": "D",
+        "material_cost": "1",
+        "processing_cost": "0",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "4"
+      }
+    ],
+    "logistics": "0.5",
+    "nre_total": "0",
+    "annual_volume": "8",
+    "peak_monthly_volume": null,
+    "project_life_years": 2,
+    "piece_price": "10.5000",
+    "total_project_value": "168.0000",
+    "expect_data_missing": false
+  },
+  {
+    "case_id": "cost-margin-only",
+    "polarity": "nominal",
+    "notes": "Only supplier margin is non-zero on the leaf.",
+    "currency": "EUR",
+    "leaves": [
+      {
+        "line_no": "L1",
+        "material_cost": "0",
+        "processing_cost": "0",
+        "overhead": "0",
+        "supplier_margin": "1.5",
+        "qty_per_chain": "2"
+      }
+    ],
+    "logistics": "0",
+    "nre_total": "0",
+    "annual_volume": "4",
+    "peak_monthly_volume": null,
+    "project_life_years": 1,
+    "piece_price": "3.0000",
+    "total_project_value": "12.0000",
+    "expect_data_missing": false
+  },
+  {
+    "case_id": "cost-usd",
+    "polarity": "nominal",
+    "notes": "Currency label is USD. Do not invent an FX conversion.",
+    "currency": "USD",
+    "leaves": [
+      {
+        "line_no": "L1",
+        "material_cost": "10",
+        "processing_cost": "0",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "1"
+      }
+    ],
+    "logistics": "0",
+    "nre_total": "0",
+    "annual_volume": "3",
+    "peak_monthly_volume": null,
+    "project_life_years": 1,
+    "piece_price": "10.0000",
+    "total_project_value": "30.0000",
+    "expect_data_missing": false
+  },
+  {
+    "case_id": "cost-eur",
+    "polarity": "nominal",
+    "notes": "Currency label is EUR.",
+    "currency": "EUR",
+    "leaves": [
+      {
+        "line_no": "L1",
+        "material_cost": "10",
+        "processing_cost": "0",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "1"
+      }
+    ],
+    "logistics": "0",
+    "nre_total": "0",
+    "annual_volume": "3",
+    "peak_monthly_volume": null,
+    "project_life_years": 1,
+    "piece_price": "10.0000",
+    "total_project_value": "30.0000",
+    "expect_data_missing": false
+  },
+  {
+    "case_id": "cost-cny",
+    "polarity": "nominal",
+    "notes": "Currency label is CNY.",
+    "currency": "CNY",
+    "leaves": [
+      {
+        "line_no": "L1",
+        "material_cost": "10",
+        "processing_cost": "0",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "1"
+      }
+    ],
+    "logistics": "0",
+    "nre_total": "0",
+    "annual_volume": "3",
+    "peak_monthly_volume": null,
+    "project_life_years": 1,
+    "piece_price": "10.0000",
+    "total_project_value": "30.0000",
+    "expect_data_missing": false
+  },
+  {
+    "case_id": "cost-life-eight",
+    "polarity": "nominal",
+    "notes": "Eight-year life.",
+    "currency": "CNY",
+    "leaves": [
+      {
+        "line_no": "L1",
+        "material_cost": "1",
+        "processing_cost": "0",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "1"
+      }
+    ],
+    "logistics": "0",
+    "nre_total": "0",
+    "annual_volume": "2",
+    "peak_monthly_volume": null,
+    "project_life_years": 8,
+    "piece_price": "1.0000",
+    "total_project_value": "16.0000",
+    "expect_data_missing": false
+  },
+  {
+    "case_id": "cost-chain-trap",
+    "polarity": "adversarial",
+    "notes": "qty_per_chain is 24 from 2 x 3 x 4. Multiplying only by the leaf quantity 4 is wrong.",
+    "currency": "CNY",
+    "leaves": [
+      {
+        "line_no": "LEAF",
+        "material_cost": "1",
+        "processing_cost": "0",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "24"
+      }
+    ],
+    "logistics": "0",
+    "nre_total": "0",
+    "annual_volume": "1",
+    "peak_monthly_volume": null,
+    "project_life_years": 1,
+    "piece_price": "24.0000",
+    "total_project_value": "24.0000",
+    "expect_data_missing": false
+  },
+  {
+    "case_id": "cost-tiny",
+    "polarity": "nominal",
+    "notes": "Extension lands on a fourth decimal place.",
+    "currency": "CNY",
+    "leaves": [
+      {
+        "line_no": "L1",
+        "material_cost": "0.0001",
+        "processing_cost": "0",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "3"
+      }
+    ],
+    "logistics": "0",
+    "nre_total": "0",
+    "annual_volume": "10",
+    "peak_monthly_volume": null,
+    "project_life_years": 1,
+    "piece_price": "0.0003",
+    "total_project_value": "0.0030",
+    "expect_data_missing": false
+  },
+  {
+    "case_id": "cost-identity",
+    "polarity": "nominal",
+    "notes": "One piece, one year, zero NRE. Project value equals piece price.",
+    "currency": "CNY",
+    "leaves": [
+      {
+        "line_no": "L1",
+        "material_cost": "2.5",
+        "processing_cost": "0.5",
+        "overhead": "0",
+        "supplier_margin": "0",
+        "qty_per_chain": "1"
+      }
+    ],
+    "logistics": "0",
+    "nre_total": "0",
+    "annual_volume": "1",
+    "peak_monthly_volume": null,
+    "project_life_years": 1,
+    "piece_price": "3.0000",
+    "total_project_value": "3.0000",
+    "expect_data_missing": false
+  }
+]

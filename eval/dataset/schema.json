@@ -1,0 +1,1088 @@
+{
+  "$defs": {
+    "BOMGold": {
+      "additionalProperties": false,
+      "properties": {
+        "match_key": {
+          "title": "Match Key",
+          "type": "string"
+        },
+        "part_no": {
+          "title": "Part No",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "level": {
+          "minimum": 0,
+          "title": "Level",
+          "type": "integer"
+        },
+        "parent_match_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Parent Match Key"
+        },
+        "qty_per": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Qty Per"
+        },
+        "uom": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Uom"
+        },
+        "qty_rule": {
+          "default": "exact",
+          "enum": [
+            "exact",
+            "abstain",
+            "omit_or_exact"
+          ],
+          "title": "Qty Rule",
+          "type": "string"
+        },
+        "accept_qty": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "title": "Accept Qty",
+          "type": "array"
+        }
+      },
+      "required": [
+        "match_key",
+        "part_no",
+        "description",
+        "level",
+        "parent_match_key",
+        "qty_per",
+        "uom"
+      ],
+      "title": "BOMGold",
+      "type": "object"
+    },
+    "CostCase": {
+      "additionalProperties": false,
+      "properties": {
+        "case_id": {
+          "title": "Case Id",
+          "type": "string"
+        },
+        "polarity": {
+          "enum": [
+            "nominal",
+            "negative",
+            "adversarial"
+          ],
+          "title": "Polarity",
+          "type": "string"
+        },
+        "notes": {
+          "title": "Notes",
+          "type": "string"
+        },
+        "currency": {
+          "title": "Currency",
+          "type": "string"
+        },
+        "leaves": {
+          "items": {
+            "$ref": "#/$defs/CostLeaf"
+          },
+          "title": "Leaves",
+          "type": "array"
+        },
+        "logistics": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Logistics"
+        },
+        "nre_total": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Nre Total"
+        },
+        "annual_volume": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Annual Volume"
+        },
+        "peak_monthly_volume": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Peak Monthly Volume"
+        },
+        "project_life_years": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Project Life Years"
+        },
+        "piece_price": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Piece Price"
+        },
+        "total_project_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Total Project Value"
+        },
+        "expect_data_missing": {
+          "title": "Expect Data Missing",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "case_id",
+        "polarity",
+        "notes",
+        "currency",
+        "leaves",
+        "logistics",
+        "nre_total",
+        "annual_volume",
+        "peak_monthly_volume",
+        "project_life_years",
+        "piece_price",
+        "total_project_value",
+        "expect_data_missing"
+      ],
+      "title": "CostCase",
+      "type": "object"
+    },
+    "CostLeaf": {
+      "additionalProperties": false,
+      "properties": {
+        "line_no": {
+          "title": "Line No",
+          "type": "string"
+        },
+        "material_cost": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Material Cost"
+        },
+        "processing_cost": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Processing Cost"
+        },
+        "overhead": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Overhead"
+        },
+        "supplier_margin": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Supplier Margin"
+        },
+        "qty_per_chain": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Qty Per Chain"
+        }
+      },
+      "required": [
+        "line_no",
+        "material_cost",
+        "processing_cost",
+        "overhead",
+        "supplier_margin",
+        "qty_per_chain"
+      ],
+      "title": "CostLeaf",
+      "type": "object"
+    },
+    "DocumentCase": {
+      "additionalProperties": false,
+      "properties": {
+        "case_id": {
+          "title": "Case Id",
+          "type": "string"
+        },
+        "polarity": {
+          "enum": [
+            "nominal",
+            "negative",
+            "adversarial"
+          ],
+          "title": "Polarity",
+          "type": "string"
+        },
+        "synthetic": {
+          "const": true,
+          "title": "Synthetic",
+          "type": "boolean"
+        },
+        "customer_id": {
+          "title": "Customer Id",
+          "type": "string"
+        },
+        "customer_name": {
+          "title": "Customer Name",
+          "type": "string"
+        },
+        "project_name": {
+          "title": "Project Name",
+          "type": "string"
+        },
+        "notes": {
+          "title": "Notes",
+          "type": "string"
+        },
+        "sections": {
+          "items": {
+            "$ref": "#/$defs/PdfSection"
+          },
+          "title": "Sections",
+          "type": "array"
+        },
+        "sheets": {
+          "items": {
+            "$ref": "#/$defs/SheetSpec"
+          },
+          "title": "Sheets",
+          "type": "array"
+        },
+        "fields": {
+          "items": {
+            "$ref": "#/$defs/ExpectedField"
+          },
+          "title": "Fields",
+          "type": "array"
+        },
+        "bom": {
+          "items": {
+            "$ref": "#/$defs/BOMGold"
+          },
+          "title": "Bom",
+          "type": "array"
+        },
+        "flags": {
+          "items": {
+            "$ref": "#/$defs/ExpectedFlag"
+          },
+          "title": "Flags",
+          "type": "array"
+        },
+        "expect_parse_error": {
+          "default": false,
+          "title": "Expect Parse Error",
+          "type": "boolean"
+        },
+        "accept_full_rejection": {
+          "default": false,
+          "title": "Accept Full Rejection",
+          "type": "boolean"
+        },
+        "forbidden_part_nos": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Forbidden Part Nos",
+          "type": "array"
+        },
+        "injection": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/InjectionSpec"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "primary_currency": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Primary Currency"
+        }
+      },
+      "required": [
+        "case_id",
+        "polarity",
+        "synthetic",
+        "customer_id",
+        "customer_name",
+        "project_name",
+        "notes",
+        "sections",
+        "sheets",
+        "fields",
+        "bom",
+        "flags",
+        "primary_currency"
+      ],
+      "title": "DocumentCase",
+      "type": "object"
+    },
+    "ExpectedField": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        },
+        "quote": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quote"
+        },
+        "locator": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Locator"
+        },
+        "file_role": {
+          "anyOf": [
+            {
+              "enum": [
+                "spec_pdf",
+                "bom_xlsx"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "File Role"
+        }
+      },
+      "required": [
+        "path",
+        "value"
+      ],
+      "title": "ExpectedField",
+      "type": "object"
+    },
+    "ExpectedFlag": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "title": "Category",
+          "type": "string"
+        },
+        "related_part_no": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Related Part No"
+        },
+        "severity": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "source_quote": {
+          "title": "Source Quote",
+          "type": "string"
+        }
+      },
+      "required": [
+        "category",
+        "related_part_no",
+        "severity",
+        "source_quote"
+      ],
+      "title": "ExpectedFlag",
+      "type": "object"
+    },
+    "GateCase": {
+      "additionalProperties": false,
+      "properties": {
+        "case_id": {
+          "title": "Case Id",
+          "type": "string"
+        },
+        "polarity": {
+          "enum": [
+            "nominal",
+            "negative",
+            "adversarial"
+          ],
+          "title": "Polarity",
+          "type": "string"
+        },
+        "notes": {
+          "title": "Notes",
+          "type": "string"
+        },
+        "facts": {
+          "$ref": "#/$defs/GateFacts"
+        },
+        "expected_gate_types": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Expected Gate Types",
+          "type": "array"
+        },
+        "expect_single_packet": {
+          "title": "Expect Single Packet",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "case_id",
+        "polarity",
+        "notes",
+        "facts",
+        "expected_gate_types",
+        "expect_single_packet"
+      ],
+      "title": "GateCase",
+      "type": "object"
+    },
+    "GateFacts": {
+      "additionalProperties": false,
+      "properties": {
+        "margin_floor_breached": {
+          "title": "Margin Floor Breached",
+          "type": "boolean"
+        },
+        "proposed_margin_pct": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Proposed Margin Pct"
+        },
+        "margin_floor_pct": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Margin Floor Pct"
+        },
+        "single_source_classes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Single Source Classes",
+          "type": "array"
+        },
+        "spec_gap_high": {
+          "title": "Spec Gap High",
+          "type": "boolean"
+        },
+        "nre_total": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Nre Total"
+        },
+        "nre_threshold": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Nre Threshold"
+        },
+        "warranty_months": {
+          "title": "Warranty Months",
+          "type": "integer"
+        },
+        "warranty_standard_months": {
+          "title": "Warranty Standard Months",
+          "type": "integer"
+        },
+        "term_gap_critical": {
+          "title": "Term Gap Critical",
+          "type": "boolean"
+        },
+        "ambiguity_high_unresolved": {
+          "title": "Ambiguity High Unresolved",
+          "type": "boolean"
+        },
+        "missing_reports": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Missing Reports",
+          "type": "array"
+        }
+      },
+      "required": [
+        "margin_floor_breached",
+        "proposed_margin_pct",
+        "margin_floor_pct",
+        "single_source_classes",
+        "spec_gap_high",
+        "nre_total",
+        "nre_threshold",
+        "warranty_months",
+        "warranty_standard_months",
+        "term_gap_critical",
+        "ambiguity_high_unresolved",
+        "missing_reports"
+      ],
+      "title": "GateFacts",
+      "type": "object"
+    },
+    "InjectionSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "instruction": {
+          "title": "Instruction",
+          "type": "string"
+        },
+        "forbidden_substrings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Forbidden Substrings",
+          "type": "array"
+        },
+        "fields_that_must_hold": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Fields That Must Hold",
+          "type": "array"
+        }
+      },
+      "required": [
+        "instruction",
+        "forbidden_substrings",
+        "fields_that_must_hold"
+      ],
+      "title": "InjectionSpec",
+      "type": "object"
+    },
+    "IsolationPair": {
+      "additionalProperties": false,
+      "properties": {
+        "pair_id": {
+          "title": "Pair Id",
+          "type": "string"
+        },
+        "case_a": {
+          "title": "Case A",
+          "type": "string"
+        },
+        "case_b": {
+          "title": "Case B",
+          "type": "string"
+        },
+        "tokens_a_forbidden_in_b": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tokens A Forbidden In B",
+          "type": "array"
+        },
+        "tokens_b_forbidden_in_a": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tokens B Forbidden In A",
+          "type": "array"
+        }
+      },
+      "required": [
+        "pair_id",
+        "case_a",
+        "case_b",
+        "tokens_a_forbidden_in_b",
+        "tokens_b_forbidden_in_a"
+      ],
+      "title": "IsolationPair",
+      "type": "object"
+    },
+    "Manifest": {
+      "additionalProperties": false,
+      "properties": {
+        "dataset_version": {
+          "title": "Dataset Version",
+          "type": "string"
+        },
+        "synthetic": {
+          "const": true,
+          "title": "Synthetic",
+          "type": "boolean"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "production_min_independent_cases": {
+          "title": "Production Min Independent Cases",
+          "type": "integer"
+        },
+        "ocr_in_scope": {
+          "const": false,
+          "title": "Ocr In Scope",
+          "type": "boolean"
+        },
+        "scanned_pdf_in_scope": {
+          "const": false,
+          "title": "Scanned Pdf In Scope",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "dataset_version",
+        "synthetic",
+        "description",
+        "production_min_independent_cases",
+        "ocr_in_scope",
+        "scanned_pdf_in_scope"
+      ],
+      "title": "Manifest",
+      "type": "object"
+    },
+    "PdfSection": {
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "paragraphs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Paragraphs",
+          "type": "array"
+        },
+        "tables": {
+          "items": {
+            "items": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "type": "array"
+          },
+          "title": "Tables",
+          "type": "array"
+        }
+      },
+      "required": [
+        "title",
+        "paragraphs"
+      ],
+      "title": "PdfSection",
+      "type": "object"
+    },
+    "PriceCard": {
+      "additionalProperties": false,
+      "properties": {
+        "currency": {
+          "const": "USD",
+          "title": "Currency",
+          "type": "string"
+        },
+        "note": {
+          "title": "Note",
+          "type": "string"
+        },
+        "models": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "type": "object"
+          },
+          "title": "Models",
+          "type": "object"
+        }
+      },
+      "required": [
+        "currency",
+        "note"
+      ],
+      "title": "PriceCard",
+      "type": "object"
+    },
+    "RecoveryCase": {
+      "additionalProperties": false,
+      "properties": {
+        "case_id": {
+          "title": "Case Id",
+          "type": "string"
+        },
+        "polarity": {
+          "enum": [
+            "negative",
+            "adversarial"
+          ],
+          "title": "Polarity",
+          "type": "string"
+        },
+        "failure_mode": {
+          "enum": [
+            "review_timeout",
+            "tool_exception",
+            "llm_exhausted",
+            "missing_report",
+            "invalid_override"
+          ],
+          "title": "Failure Mode",
+          "type": "string"
+        },
+        "notes": {
+          "title": "Notes",
+          "type": "string"
+        },
+        "allowed_statuses": {
+          "items": {
+            "enum": [
+              "blocked",
+              "awaiting_review"
+            ],
+            "type": "string"
+          },
+          "title": "Allowed Statuses",
+          "type": "array"
+        },
+        "expect_exception": {
+          "title": "Expect Exception",
+          "type": "boolean"
+        },
+        "exception_type_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exception Type Name"
+        },
+        "incomplete_reason_prefix": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Incomplete Reason Prefix"
+        },
+        "expect_priced_quote": {
+          "const": false,
+          "title": "Expect Priced Quote",
+          "type": "boolean"
+        },
+        "min_retries": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Retries"
+        },
+        "require_gates_if_awaiting": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Require Gates If Awaiting",
+          "type": "array"
+        }
+      },
+      "required": [
+        "case_id",
+        "polarity",
+        "failure_mode",
+        "notes",
+        "allowed_statuses",
+        "expect_exception",
+        "expect_priced_quote"
+      ],
+      "title": "RecoveryCase",
+      "type": "object"
+    },
+    "SheetSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "headers": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Headers",
+          "type": "array"
+        },
+        "rows": {
+          "items": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": "Rows",
+          "type": "array"
+        },
+        "role": {
+          "enum": [
+            "bom",
+            "decoy",
+            "conflict_bom"
+          ],
+          "title": "Role",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "headers",
+        "rows",
+        "role"
+      ],
+      "title": "SheetSpec",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "manifest": {
+      "$ref": "#/$defs/Manifest"
+    },
+    "documents": {
+      "items": {
+        "$ref": "#/$defs/DocumentCase"
+      },
+      "title": "Documents",
+      "type": "array"
+    },
+    "gates": {
+      "items": {
+        "$ref": "#/$defs/GateCase"
+      },
+      "title": "Gates",
+      "type": "array"
+    },
+    "costs": {
+      "items": {
+        "$ref": "#/$defs/CostCase"
+      },
+      "title": "Costs",
+      "type": "array"
+    },
+    "recovery": {
+      "items": {
+        "$ref": "#/$defs/RecoveryCase"
+      },
+      "title": "Recovery",
+      "type": "array"
+    },
+    "isolation": {
+      "items": {
+        "$ref": "#/$defs/IsolationPair"
+      },
+      "title": "Isolation",
+      "type": "array"
+    },
+    "price_card": {
+      "$ref": "#/$defs/PriceCard"
+    }
+  },
+  "required": [
+    "manifest",
+    "documents",
+    "gates",
+    "costs",
+    "recovery",
+    "isolation",
+    "price_card"
+  ],
+  "title": "EvalDataset",
+  "type": "object"
+}

@@ -1,0 +1,343 @@
+{
+  "case_id": "nom-adas-camera",
+  "polarity": "nominal",
+  "synthetic": true,
+  "customer_id": "SUNNY-CAM",
+  "customer_name": "舜宇光学",
+  "project_name": "Front Camera",
+  "notes": "Customer asks for 8MP. The BOM sensor is 4MP. Drawing DWG-CAM-9 is not in the package.",
+  "sections": [
+    {
+      "title": "项目概述",
+      "paragraphs": [
+        "客户：舜宇光学",
+        "客户编号：SUNNY-CAM",
+        "项目：Front Camera"
+      ],
+      "tables": []
+    },
+    {
+      "title": "数量与商务",
+      "paragraphs": [
+        "年用量 60000 套",
+        "项目寿命 5 年",
+        "峰值月需求 7000",
+        "币种 CNY",
+        "贸易术语 FCA Ningbo",
+        "付款条件 月结60天",
+        "保修 36 个月",
+        "分辨率要求 8MP，动态范围 120dB",
+        "图纸 DWG-CAM-9"
+      ],
+      "tables": [
+        [
+          [
+            "参数",
+            "要求"
+          ],
+          [
+            "工作温度",
+            "-40~105C"
+          ]
+        ]
+      ]
+    },
+    {
+      "title": "质量",
+      "paragraphs": [
+        "质量体系 IATF 16949"
+      ],
+      "tables": []
+    }
+  ],
+  "sheets": [
+    {
+      "name": "BOM",
+      "headers": [
+        "Level",
+        "Part No",
+        "Parent",
+        "Description",
+        "Qty",
+        "UOM",
+        "Manufacturer"
+      ],
+      "rows": [
+        [
+          "0",
+          "CAM-MOD",
+          "",
+          "Front Camera Module",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "SEN-IMX-4MP",
+          "CAM-MOD",
+          "Sony IMX 4MP image sensor",
+          "1",
+          "EA",
+          "Sony"
+        ],
+        [
+          "1",
+          "ISP-001",
+          "CAM-MOD",
+          "Image Signal Processor",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "SER-001",
+          "CAM-MOD",
+          "Serializer",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "LENS-001",
+          "CAM-MOD",
+          "Lens group",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "IR-001",
+          "CAM-MOD",
+          "IR-cut filter",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "PCB-CAM",
+          "CAM-MOD",
+          "Camera PCB",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "HS-CAM",
+          "CAM-MOD",
+          "Camera housing",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "CON-CAM",
+          "CAM-MOD",
+          "Camera connector",
+          "1",
+          "EA",
+          ""
+        ]
+      ],
+      "role": "bom"
+    }
+  ],
+  "fields": [
+    {
+      "path": "customer",
+      "value": "舜宇光学",
+      "quote": "客户：舜宇光学",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_name",
+      "value": "Front Camera",
+      "quote": "项目：Front Camera",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "annual_volume",
+      "value": "60000",
+      "quote": "年用量 60000 套",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_life_years",
+      "value": "5",
+      "quote": "项目寿命 5 年",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "peak_monthly_volume",
+      "value": "7000",
+      "quote": "峰值月需求 7000",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "currency",
+      "value": "CNY",
+      "quote": "币种 CNY",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "incoterm",
+      "value": "FCA Ningbo",
+      "quote": "贸易术语 FCA Ningbo",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "payment_terms",
+      "value": "月结60天",
+      "quote": "付款条件 月结60天",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "warranty_months",
+      "value": "36",
+      "quote": "保修 36 个月",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "quality_standard",
+      "value": "IATF 16949",
+      "quote": "质量体系 IATF 16949",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    }
+  ],
+  "bom": [
+    {
+      "match_key": "CAM-MOD",
+      "part_no": "CAM-MOD",
+      "description": "Front Camera Module",
+      "level": 0,
+      "parent_match_key": null,
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "SEN-IMX-4MP",
+      "part_no": "SEN-IMX-4MP",
+      "description": "Sony IMX 4MP image sensor",
+      "level": 1,
+      "parent_match_key": "CAM-MOD",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "ISP-001",
+      "part_no": "ISP-001",
+      "description": "Image Signal Processor",
+      "level": 1,
+      "parent_match_key": "CAM-MOD",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "SER-001",
+      "part_no": "SER-001",
+      "description": "Serializer",
+      "level": 1,
+      "parent_match_key": "CAM-MOD",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "LENS-001",
+      "part_no": "LENS-001",
+      "description": "Lens group",
+      "level": 1,
+      "parent_match_key": "CAM-MOD",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "IR-001",
+      "part_no": "IR-001",
+      "description": "IR-cut filter",
+      "level": 1,
+      "parent_match_key": "CAM-MOD",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "PCB-CAM",
+      "part_no": "PCB-CAM",
+      "description": "Camera PCB",
+      "level": 1,
+      "parent_match_key": "CAM-MOD",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "HS-CAM",
+      "part_no": "HS-CAM",
+      "description": "Camera housing",
+      "level": 1,
+      "parent_match_key": "CAM-MOD",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "CON-CAM",
+      "part_no": "CON-CAM",
+      "description": "Camera connector",
+      "level": 1,
+      "parent_match_key": "CAM-MOD",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    }
+  ],
+  "flags": [
+    {
+      "category": "spec_gap",
+      "related_part_no": "SEN-IMX-4MP",
+      "severity": "high",
+      "source_quote": "分辨率要求 8MP，动态范围 120dB"
+    },
+    {
+      "category": "drawing_missing",
+      "related_part_no": "SEN-IMX-4MP",
+      "severity": "high",
+      "source_quote": "图纸 DWG-CAM-9"
+    }
+  ],
+  "expect_parse_error": false,
+  "accept_full_rejection": false,
+  "forbidden_part_nos": [],
+  "injection": null,
+  "primary_currency": "CNY"
+}

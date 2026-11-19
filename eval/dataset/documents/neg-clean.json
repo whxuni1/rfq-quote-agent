@@ -1,0 +1,168 @@
+{
+  "case_id": "neg-clean",
+  "polarity": "negative",
+  "synthetic": true,
+  "customer_id": "CLEAN-01",
+  "customer_name": "干净样本客户",
+  "project_name": "Clean Mini",
+  "notes": "Negative control. A complete mini RFQ must not raise an ambiguity flag.",
+  "sections": [
+    {
+      "title": "项目概述",
+      "paragraphs": [
+        "客户：干净样本客户",
+        "客户编号：CLEAN-01",
+        "项目：Clean Mini"
+      ],
+      "tables": []
+    },
+    {
+      "title": "数量与商务",
+      "paragraphs": [
+        "年用量 1500 套",
+        "项目寿命 2 年",
+        "峰值月需求 150",
+        "币种 CNY",
+        "贸易术语 FCA Shanghai",
+        "付款条件 月结60天",
+        "保修 12 个月"
+      ],
+      "tables": [
+        [
+          [
+            "参数",
+            "要求"
+          ],
+          [
+            "工作温度",
+            "-10~60C"
+          ]
+        ]
+      ]
+    },
+    {
+      "title": "质量",
+      "paragraphs": [
+        "质量体系 ISO 9001"
+      ],
+      "tables": []
+    }
+  ],
+  "sheets": [
+    {
+      "name": "BOM",
+      "headers": [
+        "Level",
+        "Part No",
+        "Parent",
+        "Description",
+        "Qty",
+        "UOM",
+        "Manufacturer"
+      ],
+      "rows": [
+        [
+          "0",
+          "CLN-001",
+          "",
+          "Clean Widget",
+          "1",
+          "EA",
+          ""
+        ]
+      ],
+      "role": "bom"
+    }
+  ],
+  "fields": [
+    {
+      "path": "customer",
+      "value": "干净样本客户",
+      "quote": "客户：干净样本客户",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_name",
+      "value": "Clean Mini",
+      "quote": "项目：Clean Mini",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "annual_volume",
+      "value": "1500",
+      "quote": "年用量 1500 套",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_life_years",
+      "value": "2",
+      "quote": "项目寿命 2 年",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "peak_monthly_volume",
+      "value": "150",
+      "quote": "峰值月需求 150",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "currency",
+      "value": "CNY",
+      "quote": "币种 CNY",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "incoterm",
+      "value": "FCA Shanghai",
+      "quote": "贸易术语 FCA Shanghai",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "payment_terms",
+      "value": "月结60天",
+      "quote": "付款条件 月结60天",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "warranty_months",
+      "value": "12",
+      "quote": "保修 12 个月",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "quality_standard",
+      "value": "ISO 9001",
+      "quote": "质量体系 ISO 9001",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    }
+  ],
+  "bom": [
+    {
+      "match_key": "CLN-001",
+      "part_no": "CLN-001",
+      "description": "Clean Widget",
+      "level": 0,
+      "parent_match_key": null,
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    }
+  ],
+  "flags": [],
+  "expect_parse_error": false,
+  "accept_full_rejection": false,
+  "forbidden_part_nos": [],
+  "injection": null,
+  "primary_currency": "CNY"
+}

@@ -1,0 +1,164 @@
+{
+  "case_id": "neg-zero-qty",
+  "polarity": "negative",
+  "synthetic": true,
+  "customer_id": "ZERO-01",
+  "customer_name": "零用量客户",
+  "project_name": "Zero Qty",
+  "notes": "A zero quantity fails the BOM validator. The workbook must be rejected, not priced at zero.",
+  "sections": [
+    {
+      "title": "项目概述",
+      "paragraphs": [
+        "客户：零用量客户",
+        "客户编号：ZERO-01",
+        "项目：Zero Qty"
+      ],
+      "tables": []
+    },
+    {
+      "title": "数量与商务",
+      "paragraphs": [
+        "年用量 1000 套",
+        "项目寿命 1 年",
+        "峰值月需求 100",
+        "币种 CNY",
+        "贸易术语 EXW Shanghai",
+        "付款条件 月结60天",
+        "保修 12 个月"
+      ],
+      "tables": [
+        [
+          [
+            "参数",
+            "要求"
+          ],
+          [
+            "工作温度",
+            "-40~85C"
+          ]
+        ]
+      ]
+    },
+    {
+      "title": "质量",
+      "paragraphs": [
+        "质量体系 ISO 9001"
+      ],
+      "tables": []
+    }
+  ],
+  "sheets": [
+    {
+      "name": "BOM",
+      "headers": [
+        "Level",
+        "Part No",
+        "Parent",
+        "Description",
+        "Qty",
+        "UOM"
+      ],
+      "rows": [
+        [
+          "0",
+          "ZERO-OK",
+          "",
+          "Valid sibling",
+          "1",
+          "EA"
+        ],
+        [
+          "1",
+          "ZERO-BAD",
+          "ZERO-OK",
+          "Zero row",
+          "0",
+          "EA"
+        ]
+      ],
+      "role": "bom"
+    }
+  ],
+  "fields": [
+    {
+      "path": "customer",
+      "value": "零用量客户",
+      "quote": "客户：零用量客户",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_name",
+      "value": "Zero Qty",
+      "quote": "项目：Zero Qty",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "annual_volume",
+      "value": "1000",
+      "quote": "年用量 1000 套",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_life_years",
+      "value": "1",
+      "quote": "项目寿命 1 年",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "peak_monthly_volume",
+      "value": "100",
+      "quote": "峰值月需求 100",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "currency",
+      "value": "CNY",
+      "quote": "币种 CNY",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "incoterm",
+      "value": "EXW Shanghai",
+      "quote": "贸易术语 EXW Shanghai",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "payment_terms",
+      "value": "月结60天",
+      "quote": "付款条件 月结60天",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "warranty_months",
+      "value": "12",
+      "quote": "保修 12 个月",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "quality_standard",
+      "value": "ISO 9001",
+      "quote": "质量体系 ISO 9001",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    }
+  ],
+  "bom": [],
+  "flags": [],
+  "expect_parse_error": true,
+  "accept_full_rejection": true,
+  "forbidden_part_nos": [
+    "ZERO-BAD"
+  ],
+  "injection": null,
+  "primary_currency": "CNY"
+}
