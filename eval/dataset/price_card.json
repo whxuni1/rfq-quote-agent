@@ -1,0 +1,5 @@
+{
+  "currency": "USD",
+  "note": "No model price is configured. USD per RFQ stays unmeasured until a model id is pinned and this card has input_per_million and output_per_million for it. Do not assume a vendor price.",
+  "models": {}
+}

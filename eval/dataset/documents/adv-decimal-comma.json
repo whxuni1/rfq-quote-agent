@@ -1,0 +1,165 @@
+{
+  "case_id": "adv-decimal-comma",
+  "polarity": "adversarial",
+  "synthetic": true,
+  "customer_id": "EU-DEC",
+  "customer_name": "欧式小数客户",
+  "project_name": "Decimal Comma",
+  "notes": "The file states that the comma is the decimal separator. 1,5 means 1.5, not 15.",
+  "sections": [
+    {
+      "title": "项目概述",
+      "paragraphs": [
+        "客户：欧式小数客户",
+        "客户编号：EU-DEC",
+        "项目：Decimal Comma"
+      ],
+      "tables": []
+    },
+    {
+      "title": "数量与商务",
+      "paragraphs": [
+        "年用量 1800 套",
+        "项目寿命 2 年",
+        "峰值月需求 180",
+        "币种 EUR",
+        "贸易术语 DAP Stuttgart",
+        "付款条件 Net 30",
+        "保修 12 个月",
+        "小数点用逗号"
+      ],
+      "tables": [
+        [
+          [
+            "参数",
+            "要求"
+          ],
+          [
+            "工作温度",
+            "-20~70C"
+          ]
+        ]
+      ]
+    },
+    {
+      "title": "质量",
+      "paragraphs": [
+        "质量体系 ISO 9001"
+      ],
+      "tables": []
+    }
+  ],
+  "sheets": [
+    {
+      "name": "BOM",
+      "headers": [
+        "Level",
+        "Part No",
+        "Description",
+        "Qty",
+        "UOM"
+      ],
+      "rows": [
+        [
+          "0",
+          "EU-PART",
+          "Comma resistor",
+          "1,5",
+          "EA"
+        ]
+      ],
+      "role": "bom"
+    }
+  ],
+  "fields": [
+    {
+      "path": "customer",
+      "value": "欧式小数客户",
+      "quote": "客户：欧式小数客户",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_name",
+      "value": "Decimal Comma",
+      "quote": "项目：Decimal Comma",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "annual_volume",
+      "value": "1800",
+      "quote": "年用量 1800 套",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_life_years",
+      "value": "2",
+      "quote": "项目寿命 2 年",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "peak_monthly_volume",
+      "value": "180",
+      "quote": "峰值月需求 180",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "currency",
+      "value": "EUR",
+      "quote": "币种 EUR",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "incoterm",
+      "value": "DAP Stuttgart",
+      "quote": "贸易术语 DAP Stuttgart",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "payment_terms",
+      "value": "Net 30",
+      "quote": "付款条件 Net 30",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "warranty_months",
+      "value": "12",
+      "quote": "保修 12 个月",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "quality_standard",
+      "value": "ISO 9001",
+      "quote": "质量体系 ISO 9001",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    }
+  ],
+  "bom": [
+    {
+      "match_key": "EU-PART",
+      "part_no": "EU-PART",
+      "description": "Comma resistor",
+      "level": 0,
+      "parent_match_key": null,
+      "qty_per": "1.5",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    }
+  ],
+  "flags": [],
+  "expect_parse_error": false,
+  "accept_full_rejection": false,
+  "forbidden_part_nos": [],
+  "injection": null,
+  "primary_currency": "EUR"
+}

@@ -1,0 +1,196 @@
+{
+  "case_id": "adv-soc-meters",
+  "polarity": "adversarial",
+  "synthetic": true,
+  "customer_id": "UOM-TRAP",
+  "customer_name": "单位陷阱客户",
+  "project_name": "UoM Trap",
+  "notes": "The SoC is priced per meter. Read the unit as written and raise uom_ambiguous. Do not rewrite it to EA.",
+  "sections": [
+    {
+      "title": "项目概述",
+      "paragraphs": [
+        "客户：单位陷阱客户",
+        "客户编号：UOM-TRAP",
+        "项目：UoM Trap"
+      ],
+      "tables": []
+    },
+    {
+      "title": "数量与商务",
+      "paragraphs": [
+        "年用量 2000 套",
+        "项目寿命 2 年",
+        "峰值月需求 200",
+        "币种 CNY",
+        "贸易术语 FCA Shanghai",
+        "付款条件 月结60天",
+        "保修 12 个月",
+        "SoC 用量按米计价"
+      ],
+      "tables": [
+        [
+          [
+            "参数",
+            "要求"
+          ],
+          [
+            "工作温度",
+            "-40~85C"
+          ]
+        ]
+      ]
+    },
+    {
+      "title": "质量",
+      "paragraphs": [
+        "质量体系 IATF 16949"
+      ],
+      "tables": []
+    }
+  ],
+  "sheets": [
+    {
+      "name": "BOM",
+      "headers": [
+        "Level",
+        "Part No",
+        "Parent",
+        "Description",
+        "Qty",
+        "UOM",
+        "Manufacturer"
+      ],
+      "rows": [
+        [
+          "0",
+          "UOM-ASM",
+          "",
+          "Trap Assembly",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "SOC-TRAP",
+          "UOM-ASM",
+          "Cabin SoC",
+          "1",
+          "M",
+          ""
+        ]
+      ],
+      "role": "bom"
+    }
+  ],
+  "fields": [
+    {
+      "path": "customer",
+      "value": "单位陷阱客户",
+      "quote": "客户：单位陷阱客户",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_name",
+      "value": "UoM Trap",
+      "quote": "项目：UoM Trap",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "annual_volume",
+      "value": "2000",
+      "quote": "年用量 2000 套",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_life_years",
+      "value": "2",
+      "quote": "项目寿命 2 年",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "peak_monthly_volume",
+      "value": "200",
+      "quote": "峰值月需求 200",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "currency",
+      "value": "CNY",
+      "quote": "币种 CNY",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "incoterm",
+      "value": "FCA Shanghai",
+      "quote": "贸易术语 FCA Shanghai",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "payment_terms",
+      "value": "月结60天",
+      "quote": "付款条件 月结60天",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "warranty_months",
+      "value": "12",
+      "quote": "保修 12 个月",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "quality_standard",
+      "value": "IATF 16949",
+      "quote": "质量体系 IATF 16949",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    }
+  ],
+  "bom": [
+    {
+      "match_key": "UOM-ASM",
+      "part_no": "UOM-ASM",
+      "description": "Trap Assembly",
+      "level": 0,
+      "parent_match_key": null,
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "SOC-TRAP",
+      "part_no": "SOC-TRAP",
+      "description": "Cabin SoC",
+      "level": 1,
+      "parent_match_key": "UOM-ASM",
+      "qty_per": "1",
+      "uom": "M",
+      "qty_rule": "exact",
+      "accept_qty": []
+    }
+  ],
+  "flags": [
+    {
+      "category": "uom_ambiguous",
+      "related_part_no": "SOC-TRAP",
+      "severity": "high",
+      "source_quote": "SoC 用量按米计价"
+    }
+  ],
+  "expect_parse_error": false,
+  "accept_full_rejection": false,
+  "forbidden_part_nos": [],
+  "injection": null,
+  "primary_currency": "CNY"
+}

@@ -1,0 +1,309 @@
+{
+  "case_id": "nom-door-pcba",
+  "polarity": "nominal",
+  "synthetic": true,
+  "customer_id": "HUAYU-DOOR",
+  "customer_name": "华域汽车电子",
+  "project_name": "Door Control PCBA",
+  "notes": "Two-level door PCBA. Consistent CNY commercial terms. No ambiguity flags.",
+  "sections": [
+    {
+      "title": "项目概述",
+      "paragraphs": [
+        "客户：华域汽车电子",
+        "客户编号：HUAYU-DOOR",
+        "项目：Door Control PCBA"
+      ],
+      "tables": []
+    },
+    {
+      "title": "数量与商务",
+      "paragraphs": [
+        "年用量 100000 套",
+        "项目寿命 5 年",
+        "峰值月需求 12000",
+        "币种 CNY",
+        "贸易术语 FCA Shanghai",
+        "付款条件 月结60天",
+        "保修 24 个月",
+        "集成电路要求 AEC-Q100"
+      ],
+      "tables": [
+        [
+          [
+            "参数",
+            "要求"
+          ],
+          [
+            "工作温度",
+            "-40~105C"
+          ]
+        ]
+      ]
+    },
+    {
+      "title": "质量",
+      "paragraphs": [
+        "质量体系 IATF 16949"
+      ],
+      "tables": []
+    }
+  ],
+  "sheets": [
+    {
+      "name": "BOM",
+      "headers": [
+        "Level",
+        "Part No",
+        "Parent",
+        "Description",
+        "Qty",
+        "UOM",
+        "Manufacturer"
+      ],
+      "rows": [
+        [
+          "0",
+          "DC-PCBA",
+          "",
+          "Door Control Assembly",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "MCU-001",
+          "DC-PCBA",
+          "Automotive MCU",
+          "1",
+          "EA",
+          "Infineon"
+        ],
+        [
+          "1",
+          "PWR-001",
+          "DC-PCBA",
+          "Power IC",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "CON-001",
+          "DC-PCBA",
+          "Connector 32pin",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "R-100K",
+          "DC-PCBA",
+          "Resistor 100k",
+          "12",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "C-100N",
+          "DC-PCBA",
+          "Capacitor 100nF",
+          "8",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "PCB-001",
+          "DC-PCBA",
+          "FR4 PCB",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "HS-001",
+          "DC-PCBA",
+          "Aluminum housing",
+          "1",
+          "EA",
+          ""
+        ]
+      ],
+      "role": "bom"
+    }
+  ],
+  "fields": [
+    {
+      "path": "customer",
+      "value": "华域汽车电子",
+      "quote": "客户：华域汽车电子",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_name",
+      "value": "Door Control PCBA",
+      "quote": "项目：Door Control PCBA",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "annual_volume",
+      "value": "100000",
+      "quote": "年用量 100000 套",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_life_years",
+      "value": "5",
+      "quote": "项目寿命 5 年",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "peak_monthly_volume",
+      "value": "12000",
+      "quote": "峰值月需求 12000",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "currency",
+      "value": "CNY",
+      "quote": "币种 CNY",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "incoterm",
+      "value": "FCA Shanghai",
+      "quote": "贸易术语 FCA Shanghai",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "payment_terms",
+      "value": "月结60天",
+      "quote": "付款条件 月结60天",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "warranty_months",
+      "value": "24",
+      "quote": "保修 24 个月",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "quality_standard",
+      "value": "IATF 16949",
+      "quote": "质量体系 IATF 16949",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    }
+  ],
+  "bom": [
+    {
+      "match_key": "DC-PCBA",
+      "part_no": "DC-PCBA",
+      "description": "Door Control Assembly",
+      "level": 0,
+      "parent_match_key": null,
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "MCU-001",
+      "part_no": "MCU-001",
+      "description": "Automotive MCU",
+      "level": 1,
+      "parent_match_key": "DC-PCBA",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "PWR-001",
+      "part_no": "PWR-001",
+      "description": "Power IC",
+      "level": 1,
+      "parent_match_key": "DC-PCBA",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "CON-001",
+      "part_no": "CON-001",
+      "description": "Connector 32pin",
+      "level": 1,
+      "parent_match_key": "DC-PCBA",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "R-100K",
+      "part_no": "R-100K",
+      "description": "Resistor 100k",
+      "level": 1,
+      "parent_match_key": "DC-PCBA",
+      "qty_per": "12",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "C-100N",
+      "part_no": "C-100N",
+      "description": "Capacitor 100nF",
+      "level": 1,
+      "parent_match_key": "DC-PCBA",
+      "qty_per": "8",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "PCB-001",
+      "part_no": "PCB-001",
+      "description": "FR4 PCB",
+      "level": 1,
+      "parent_match_key": "DC-PCBA",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "HS-001",
+      "part_no": "HS-001",
+      "description": "Aluminum housing",
+      "level": 1,
+      "parent_match_key": "DC-PCBA",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    }
+  ],
+  "flags": [],
+  "expect_parse_error": false,
+  "accept_full_rejection": false,
+  "forbidden_part_nos": [],
+  "injection": null,
+  "primary_currency": "CNY"
+}

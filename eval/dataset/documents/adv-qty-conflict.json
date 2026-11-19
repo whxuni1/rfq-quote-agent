@@ -1,0 +1,191 @@
+{
+  "case_id": "adv-qty-conflict",
+  "polarity": "adversarial",
+  "synthetic": true,
+  "customer_id": "QTY-CONF",
+  "customer_name": "双表冲突客户",
+  "project_name": "Qty Conflict",
+  "notes": "Two BOM-shaped sheets disagree on quantity. The quantity must be abstained and flagged.",
+  "sections": [
+    {
+      "title": "项目概述",
+      "paragraphs": [
+        "客户：双表冲突客户",
+        "客户编号：QTY-CONF",
+        "项目：Qty Conflict"
+      ],
+      "tables": []
+    },
+    {
+      "title": "数量与商务",
+      "paragraphs": [
+        "年用量 2200 套",
+        "项目寿命 2 年",
+        "峰值月需求 220",
+        "币种 CNY",
+        "贸易术语 FCA Shanghai",
+        "付款条件 月结60天",
+        "保修 12 个月"
+      ],
+      "tables": [
+        [
+          [
+            "参数",
+            "要求"
+          ],
+          [
+            "工作温度",
+            "-40~85C"
+          ]
+        ]
+      ]
+    },
+    {
+      "title": "质量",
+      "paragraphs": [
+        "质量体系 ISO 9001"
+      ],
+      "tables": []
+    }
+  ],
+  "sheets": [
+    {
+      "name": "BOM",
+      "headers": [
+        "Level",
+        "Part No",
+        "Description",
+        "Qty",
+        "UOM"
+      ],
+      "rows": [
+        [
+          "0",
+          "R-CONFLICT",
+          "Conflict resistor",
+          "2",
+          "EA"
+        ]
+      ],
+      "role": "conflict_bom"
+    },
+    {
+      "name": "BOM_ALT",
+      "headers": [
+        "Level",
+        "Part No",
+        "Description",
+        "Qty",
+        "UOM"
+      ],
+      "rows": [
+        [
+          "0",
+          "R-CONFLICT",
+          "Conflict resistor",
+          "3",
+          "EA"
+        ]
+      ],
+      "role": "conflict_bom"
+    }
+  ],
+  "fields": [
+    {
+      "path": "customer",
+      "value": "双表冲突客户",
+      "quote": "客户：双表冲突客户",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_name",
+      "value": "Qty Conflict",
+      "quote": "项目：Qty Conflict",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "annual_volume",
+      "value": "2200",
+      "quote": "年用量 2200 套",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_life_years",
+      "value": "2",
+      "quote": "项目寿命 2 年",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "peak_monthly_volume",
+      "value": "220",
+      "quote": "峰值月需求 220",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "currency",
+      "value": "CNY",
+      "quote": "币种 CNY",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "incoterm",
+      "value": "FCA Shanghai",
+      "quote": "贸易术语 FCA Shanghai",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "payment_terms",
+      "value": "月结60天",
+      "quote": "付款条件 月结60天",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "warranty_months",
+      "value": "12",
+      "quote": "保修 12 个月",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "quality_standard",
+      "value": "ISO 9001",
+      "quote": "质量体系 ISO 9001",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    }
+  ],
+  "bom": [
+    {
+      "match_key": "R-CONFLICT",
+      "part_no": "R-CONFLICT",
+      "description": "Conflict resistor",
+      "level": 0,
+      "parent_match_key": null,
+      "qty_per": null,
+      "uom": "EA",
+      "qty_rule": "abstain",
+      "accept_qty": []
+    }
+  ],
+  "flags": [
+    {
+      "category": "qty_ambiguous",
+      "related_part_no": "R-CONFLICT",
+      "severity": "high",
+      "source_quote": "R-CONFLICT"
+    }
+  ],
+  "expect_parse_error": false,
+  "accept_full_rejection": false,
+  "forbidden_part_nos": [],
+  "injection": null,
+  "primary_currency": "CNY"
+}

@@ -1,0 +1,79 @@
+[
+  {
+    "case_id": "rec-review-timeout",
+    "polarity": "adversarial",
+    "failure_mode": "review_timeout",
+    "notes": "A reviewer timeout blocks the quote and records review_timeout.",
+    "allowed_statuses": [
+      "blocked"
+    ],
+    "expect_exception": false,
+    "exception_type_name": null,
+    "incomplete_reason_prefix": "review_timeout:",
+    "expect_priced_quote": false,
+    "min_retries": null,
+    "require_gates_if_awaiting": []
+  },
+  {
+    "case_id": "rec-tool-exception",
+    "polarity": "negative",
+    "failure_mode": "tool_exception",
+    "notes": "Tool errors propagate as ToolError and do not become a price.",
+    "allowed_statuses": [],
+    "expect_exception": true,
+    "exception_type_name": "ToolError",
+    "incomplete_reason_prefix": null,
+    "expect_priced_quote": false,
+    "min_retries": null,
+    "require_gates_if_awaiting": []
+  },
+  {
+    "case_id": "rec-llm-exhausted",
+    "polarity": "negative",
+    "failure_mode": "llm_exhausted",
+    "notes": "The model call is retried twice. The terminal state is blocked or DATA_MISSING review.",
+    "allowed_statuses": [
+      "blocked",
+      "awaiting_review"
+    ],
+    "expect_exception": false,
+    "exception_type_name": null,
+    "incomplete_reason_prefix": null,
+    "expect_priced_quote": false,
+    "min_retries": 2,
+    "require_gates_if_awaiting": [
+      "DATA_MISSING"
+    ]
+  },
+  {
+    "case_id": "rec-missing-report",
+    "polarity": "negative",
+    "failure_mode": "missing_report",
+    "notes": "A missing engineering report does not produce a priced quote.",
+    "allowed_statuses": [
+      "blocked",
+      "awaiting_review"
+    ],
+    "expect_exception": false,
+    "exception_type_name": null,
+    "incomplete_reason_prefix": null,
+    "expect_priced_quote": false,
+    "min_retries": null,
+    "require_gates_if_awaiting": [
+      "DATA_MISSING"
+    ]
+  },
+  {
+    "case_id": "rec-invalid-override",
+    "polarity": "adversarial",
+    "failure_mode": "invalid_override",
+    "notes": "An override that fails validation raises. The spec does not name the exception class.",
+    "allowed_statuses": [],
+    "expect_exception": true,
+    "exception_type_name": null,
+    "incomplete_reason_prefix": null,
+    "expect_priced_quote": false,
+    "min_retries": null,
+    "require_gates_if_awaiting": []
+  }
+]

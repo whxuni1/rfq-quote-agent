@@ -1,0 +1,180 @@
+{
+  "case_id": "nom-software",
+  "polarity": "nominal",
+  "synthetic": true,
+  "customer_id": "THUNDER-SW",
+  "customer_name": "中科创达",
+  "project_name": "License Pack",
+  "notes": "Indent encoding, no level column and no parent column. License unit is LIC.",
+  "sections": [
+    {
+      "title": "项目概述",
+      "paragraphs": [
+        "客户：中科创达",
+        "客户编号：THUNDER-SW",
+        "项目：License Pack"
+      ],
+      "tables": []
+    },
+    {
+      "title": "数量与商务",
+      "paragraphs": [
+        "年用量 10000 套",
+        "项目寿命 3 年",
+        "峰值月需求 1000",
+        "币种 CNY",
+        "贸易术语 EXW Shenzhen",
+        "付款条件 预付100%",
+        "保修 12 个月",
+        "许可单位 LIC 表示一套软件许可"
+      ],
+      "tables": [
+        [
+          [
+            "参数",
+            "要求"
+          ],
+          [
+            "工作温度",
+            "0~70C"
+          ]
+        ]
+      ]
+    },
+    {
+      "title": "质量",
+      "paragraphs": [
+        "质量体系 ISO 9001"
+      ],
+      "tables": []
+    }
+  ],
+  "sheets": [
+    {
+      "name": "BOM",
+      "headers": [
+        "Part No",
+        "Description",
+        "Qty",
+        "UOM"
+      ],
+      "rows": [
+        [
+          "SW-PACK",
+          "License Pack",
+          "1",
+          "EA"
+        ],
+        [
+          "SW-LIC-01",
+          "  Cockpit software license",
+          "1",
+          "LIC"
+        ]
+      ],
+      "role": "bom"
+    }
+  ],
+  "fields": [
+    {
+      "path": "customer",
+      "value": "中科创达",
+      "quote": "客户：中科创达",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_name",
+      "value": "License Pack",
+      "quote": "项目：License Pack",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "annual_volume",
+      "value": "10000",
+      "quote": "年用量 10000 套",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_life_years",
+      "value": "3",
+      "quote": "项目寿命 3 年",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "peak_monthly_volume",
+      "value": "1000",
+      "quote": "峰值月需求 1000",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "currency",
+      "value": "CNY",
+      "quote": "币种 CNY",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "incoterm",
+      "value": "EXW Shenzhen",
+      "quote": "贸易术语 EXW Shenzhen",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "payment_terms",
+      "value": "预付100%",
+      "quote": "付款条件 预付100%",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "warranty_months",
+      "value": "12",
+      "quote": "保修 12 个月",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "quality_standard",
+      "value": "ISO 9001",
+      "quote": "质量体系 ISO 9001",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    }
+  ],
+  "bom": [
+    {
+      "match_key": "SW-PACK",
+      "part_no": "SW-PACK",
+      "description": "License Pack",
+      "level": 0,
+      "parent_match_key": null,
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "SW-LIC-01",
+      "part_no": "SW-LIC-01",
+      "description": "Cockpit software license",
+      "level": 1,
+      "parent_match_key": "SW-PACK",
+      "qty_per": "1",
+      "uom": "LIC",
+      "qty_rule": "exact",
+      "accept_qty": []
+    }
+  ],
+  "flags": [],
+  "expect_parse_error": false,
+  "accept_full_rejection": false,
+  "forbidden_part_nos": [],
+  "injection": null,
+  "primary_currency": "CNY"
+}

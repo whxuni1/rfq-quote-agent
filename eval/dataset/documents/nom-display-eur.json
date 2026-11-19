@@ -1,0 +1,228 @@
+{
+  "case_id": "nom-display-eur",
+  "polarity": "nominal",
+  "synthetic": true,
+  "customer_id": "BOE-DISP",
+  "customer_name": "京东方",
+  "project_name": "Cluster Display",
+  "notes": "Dual-source panel. EUR commercial terms.",
+  "sections": [
+    {
+      "title": "项目概述",
+      "paragraphs": [
+        "客户：京东方",
+        "客户编号：BOE-DISP",
+        "项目：Cluster Display"
+      ],
+      "tables": []
+    },
+    {
+      "title": "数量与商务",
+      "paragraphs": [
+        "年用量 40000 套",
+        "项目寿命 5 年",
+        "峰值月需求 4000",
+        "币种 EUR",
+        "贸易术语 DAP Stuttgart",
+        "付款条件 Net 30",
+        "保修 24 个月"
+      ],
+      "tables": [
+        [
+          [
+            "参数",
+            "要求"
+          ],
+          [
+            "工作温度",
+            "-30~85C"
+          ]
+        ]
+      ]
+    },
+    {
+      "title": "质量",
+      "paragraphs": [
+        "质量体系 IATF 16949"
+      ],
+      "tables": []
+    }
+  ],
+  "sheets": [
+    {
+      "name": "BOM",
+      "headers": [
+        "Level",
+        "Part No",
+        "Parent",
+        "Description",
+        "Qty",
+        "UOM",
+        "Manufacturer"
+      ],
+      "rows": [
+        [
+          "0",
+          "DISP-ASM",
+          "",
+          "Cluster Display",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "PANEL-15",
+          "DISP-ASM",
+          "15 inch panel",
+          "1",
+          "EA",
+          "BOE/AUO"
+        ],
+        [
+          "1",
+          "PCB-DISP",
+          "DISP-ASM",
+          "Display PCB",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "BRK-DISP",
+          "DISP-ASM",
+          "Display bracket",
+          "1",
+          "EA",
+          ""
+        ]
+      ],
+      "role": "bom"
+    }
+  ],
+  "fields": [
+    {
+      "path": "customer",
+      "value": "京东方",
+      "quote": "客户：京东方",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_name",
+      "value": "Cluster Display",
+      "quote": "项目：Cluster Display",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "annual_volume",
+      "value": "40000",
+      "quote": "年用量 40000 套",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_life_years",
+      "value": "5",
+      "quote": "项目寿命 5 年",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "peak_monthly_volume",
+      "value": "4000",
+      "quote": "峰值月需求 4000",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "currency",
+      "value": "EUR",
+      "quote": "币种 EUR",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "incoterm",
+      "value": "DAP Stuttgart",
+      "quote": "贸易术语 DAP Stuttgart",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "payment_terms",
+      "value": "Net 30",
+      "quote": "付款条件 Net 30",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "warranty_months",
+      "value": "24",
+      "quote": "保修 24 个月",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "quality_standard",
+      "value": "IATF 16949",
+      "quote": "质量体系 IATF 16949",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    }
+  ],
+  "bom": [
+    {
+      "match_key": "DISP-ASM",
+      "part_no": "DISP-ASM",
+      "description": "Cluster Display",
+      "level": 0,
+      "parent_match_key": null,
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "PANEL-15",
+      "part_no": "PANEL-15",
+      "description": "15 inch panel",
+      "level": 1,
+      "parent_match_key": "DISP-ASM",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "PCB-DISP",
+      "part_no": "PCB-DISP",
+      "description": "Display PCB",
+      "level": 1,
+      "parent_match_key": "DISP-ASM",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "BRK-DISP",
+      "part_no": "BRK-DISP",
+      "description": "Display bracket",
+      "level": 1,
+      "parent_match_key": "DISP-ASM",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    }
+  ],
+  "flags": [],
+  "expect_parse_error": false,
+  "accept_full_rejection": false,
+  "forbidden_part_nos": [],
+  "injection": null,
+  "primary_currency": "EUR"
+}

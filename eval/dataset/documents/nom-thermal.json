@@ -1,0 +1,208 @@
+{
+  "case_id": "nom-thermal",
+  "polarity": "nominal",
+  "synthetic": true,
+  "customer_id": "VALEO-THM",
+  "customer_name": "法雷奥",
+  "project_name": "Thermal Stack",
+  "notes": "Thermal pad and clips. Consistent CNY terms.",
+  "sections": [
+    {
+      "title": "项目概述",
+      "paragraphs": [
+        "客户：法雷奥",
+        "客户编号：VALEO-THM",
+        "项目：Thermal Stack"
+      ],
+      "tables": []
+    },
+    {
+      "title": "数量与商务",
+      "paragraphs": [
+        "年用量 70000 套",
+        "项目寿命 3 年",
+        "峰值月需求 8000",
+        "币种 CNY",
+        "贸易术语 FCA Wuhan",
+        "付款条件 月结60天",
+        "保修 24 个月"
+      ],
+      "tables": [
+        [
+          [
+            "参数",
+            "要求"
+          ],
+          [
+            "工作温度",
+            "-40~150C"
+          ]
+        ]
+      ]
+    },
+    {
+      "title": "质量",
+      "paragraphs": [
+        "质量体系 IATF 16949"
+      ],
+      "tables": []
+    }
+  ],
+  "sheets": [
+    {
+      "name": "BOM",
+      "headers": [
+        "Level",
+        "Part No",
+        "Parent",
+        "Description",
+        "Qty",
+        "UOM",
+        "Manufacturer"
+      ],
+      "rows": [
+        [
+          "0",
+          "THM-ASM",
+          "",
+          "Thermal Stack",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "PAD-001",
+          "THM-ASM",
+          "Thermal pad",
+          "4",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "CLIP-001",
+          "THM-ASM",
+          "Retaining clip",
+          "8",
+          "EA",
+          ""
+        ]
+      ],
+      "role": "bom"
+    }
+  ],
+  "fields": [
+    {
+      "path": "customer",
+      "value": "法雷奥",
+      "quote": "客户：法雷奥",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_name",
+      "value": "Thermal Stack",
+      "quote": "项目：Thermal Stack",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "annual_volume",
+      "value": "70000",
+      "quote": "年用量 70000 套",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_life_years",
+      "value": "3",
+      "quote": "项目寿命 3 年",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "peak_monthly_volume",
+      "value": "8000",
+      "quote": "峰值月需求 8000",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "currency",
+      "value": "CNY",
+      "quote": "币种 CNY",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "incoterm",
+      "value": "FCA Wuhan",
+      "quote": "贸易术语 FCA Wuhan",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "payment_terms",
+      "value": "月结60天",
+      "quote": "付款条件 月结60天",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "warranty_months",
+      "value": "24",
+      "quote": "保修 24 个月",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "quality_standard",
+      "value": "IATF 16949",
+      "quote": "质量体系 IATF 16949",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    }
+  ],
+  "bom": [
+    {
+      "match_key": "THM-ASM",
+      "part_no": "THM-ASM",
+      "description": "Thermal Stack",
+      "level": 0,
+      "parent_match_key": null,
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "PAD-001",
+      "part_no": "PAD-001",
+      "description": "Thermal pad",
+      "level": 1,
+      "parent_match_key": "THM-ASM",
+      "qty_per": "4",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "CLIP-001",
+      "part_no": "CLIP-001",
+      "description": "Retaining clip",
+      "level": 1,
+      "parent_match_key": "THM-ASM",
+      "qty_per": "8",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    }
+  ],
+  "flags": [],
+  "expect_parse_error": false,
+  "accept_full_rejection": false,
+  "forbidden_part_nos": [],
+  "injection": null,
+  "primary_currency": "CNY"
+}

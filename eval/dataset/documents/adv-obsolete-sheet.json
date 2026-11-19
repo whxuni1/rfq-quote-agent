@@ -1,0 +1,184 @@
+{
+  "case_id": "adv-obsolete-sheet",
+  "polarity": "adversarial",
+  "synthetic": true,
+  "customer_id": "OBS-01",
+  "customer_name": "作废表客户",
+  "project_name": "Obsolete Sheet",
+  "notes": "OLD-999 appears only on a note sheet that has no part columns. It is not a BOM line.",
+  "sections": [
+    {
+      "title": "项目概述",
+      "paragraphs": [
+        "客户：作废表客户",
+        "客户编号：OBS-01",
+        "项目：Obsolete Sheet"
+      ],
+      "tables": []
+    },
+    {
+      "title": "数量与商务",
+      "paragraphs": [
+        "年用量 1400 套",
+        "项目寿命 2 年",
+        "峰值月需求 140",
+        "币种 CNY",
+        "贸易术语 FCA Shanghai",
+        "付款条件 月结60天",
+        "保修 12 个月"
+      ],
+      "tables": [
+        [
+          [
+            "参数",
+            "要求"
+          ],
+          [
+            "工作温度",
+            "-40~85C"
+          ]
+        ]
+      ]
+    },
+    {
+      "title": "质量",
+      "paragraphs": [
+        "质量体系 ISO 9001"
+      ],
+      "tables": []
+    }
+  ],
+  "sheets": [
+    {
+      "name": "BOM",
+      "headers": [
+        "Level",
+        "Part No",
+        "Parent",
+        "Description",
+        "Qty",
+        "UOM",
+        "Manufacturer"
+      ],
+      "rows": [
+        [
+          "0",
+          "LIVE-001",
+          "",
+          "Live Widget",
+          "1",
+          "EA",
+          ""
+        ]
+      ],
+      "role": "bom"
+    },
+    {
+      "name": "ChangeLog",
+      "headers": [
+        "Date",
+        "Note"
+      ],
+      "rows": [
+        [
+          "2026-01-01",
+          "作废 OLD-999"
+        ]
+      ],
+      "role": "decoy"
+    }
+  ],
+  "fields": [
+    {
+      "path": "customer",
+      "value": "作废表客户",
+      "quote": "客户：作废表客户",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_name",
+      "value": "Obsolete Sheet",
+      "quote": "项目：Obsolete Sheet",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "annual_volume",
+      "value": "1400",
+      "quote": "年用量 1400 套",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_life_years",
+      "value": "2",
+      "quote": "项目寿命 2 年",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "peak_monthly_volume",
+      "value": "140",
+      "quote": "峰值月需求 140",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "currency",
+      "value": "CNY",
+      "quote": "币种 CNY",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "incoterm",
+      "value": "FCA Shanghai",
+      "quote": "贸易术语 FCA Shanghai",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "payment_terms",
+      "value": "月结60天",
+      "quote": "付款条件 月结60天",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "warranty_months",
+      "value": "12",
+      "quote": "保修 12 个月",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "quality_standard",
+      "value": "ISO 9001",
+      "quote": "质量体系 ISO 9001",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    }
+  ],
+  "bom": [
+    {
+      "match_key": "LIVE-001",
+      "part_no": "LIVE-001",
+      "description": "Live Widget",
+      "level": 0,
+      "parent_match_key": null,
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    }
+  ],
+  "flags": [],
+  "expect_parse_error": false,
+  "accept_full_rejection": false,
+  "forbidden_part_nos": [
+    "OLD-999"
+  ],
+  "injection": null,
+  "primary_currency": "CNY"
+}

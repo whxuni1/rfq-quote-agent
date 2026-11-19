@@ -1,0 +1,376 @@
+{
+  "case_id": "nom-cockpit-core",
+  "polarity": "nominal",
+  "synthetic": true,
+  "customer_id": "DESAY-CK",
+  "customer_name": "德赛西威",
+  "project_name": "Cockpit Core",
+  "notes": "Three-level cockpit board. Chinese headers. Display row has a manufacturer and no part number.",
+  "sections": [
+    {
+      "title": "项目概述",
+      "paragraphs": [
+        "客户：德赛西威",
+        "客户编号：DESAY-CK",
+        "项目：Cockpit Core"
+      ],
+      "tables": []
+    },
+    {
+      "title": "数量与商务",
+      "paragraphs": [
+        "年用量 80000 套",
+        "项目寿命 6 年",
+        "峰值月需求 9000",
+        "币种 CNY",
+        "贸易术语 DDP Shanghai",
+        "付款条件 月结60天",
+        "保修 48 个月",
+        "责任上限 150%"
+      ],
+      "tables": [
+        [
+          [
+            "参数",
+            "要求"
+          ],
+          [
+            "工作温度",
+            "-40~85C"
+          ]
+        ]
+      ]
+    },
+    {
+      "title": "质量",
+      "paragraphs": [
+        "质量体系 IATF 16949"
+      ],
+      "tables": []
+    }
+  ],
+  "sheets": [
+    {
+      "name": "BOM",
+      "headers": [
+        "层级",
+        "物料号",
+        "父件",
+        "描述",
+        "用量",
+        "单位",
+        "厂商"
+      ],
+      "rows": [
+        [
+          "0",
+          "CK-ASSY",
+          "",
+          "Cockpit Core Assembly",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "CK-BOARD",
+          "CK-ASSY",
+          "Core Board",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "2",
+          "SOC-8295",
+          "CK-BOARD",
+          "Qualcomm SA8295",
+          "1",
+          "EA",
+          "Qualcomm"
+        ],
+        [
+          "2",
+          "DDR-001",
+          "CK-BOARD",
+          "LPDDR5 8GB",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "2",
+          "NAND-001",
+          "CK-BOARD",
+          "UFS NAND",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "2",
+          "PMIC-001",
+          "CK-BOARD",
+          "PMIC",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "",
+          "CK-ASSY",
+          "中控显示总成",
+          "1",
+          "EA",
+          "BOE"
+        ],
+        [
+          "1",
+          "CAM-001",
+          "CK-ASSY",
+          "Cabin Camera",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "MIC-001",
+          "CK-ASSY",
+          "Microphone",
+          "2",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "WIFI-001",
+          "CK-ASSY",
+          "Wi-Fi Module",
+          "1",
+          "EA",
+          ""
+        ],
+        [
+          "1",
+          "THM-001",
+          "CK-ASSY",
+          "Heat Spreader",
+          "1",
+          "EA",
+          ""
+        ]
+      ],
+      "role": "bom"
+    }
+  ],
+  "fields": [
+    {
+      "path": "customer",
+      "value": "德赛西威",
+      "quote": "客户：德赛西威",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_name",
+      "value": "Cockpit Core",
+      "quote": "项目：Cockpit Core",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "annual_volume",
+      "value": "80000",
+      "quote": "年用量 80000 套",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "project_life_years",
+      "value": "6",
+      "quote": "项目寿命 6 年",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "peak_monthly_volume",
+      "value": "9000",
+      "quote": "峰值月需求 9000",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "currency",
+      "value": "CNY",
+      "quote": "币种 CNY",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "incoterm",
+      "value": "DDP Shanghai",
+      "quote": "贸易术语 DDP Shanghai",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "payment_terms",
+      "value": "月结60天",
+      "quote": "付款条件 月结60天",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "warranty_months",
+      "value": "48",
+      "quote": "保修 48 个月",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    },
+    {
+      "path": "quality_standard",
+      "value": "IATF 16949",
+      "quote": "质量体系 IATF 16949",
+      "locator": "page:1",
+      "file_role": "spec_pdf"
+    }
+  ],
+  "bom": [
+    {
+      "match_key": "CK-ASSY",
+      "part_no": "CK-ASSY",
+      "description": "Cockpit Core Assembly",
+      "level": 0,
+      "parent_match_key": null,
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "CK-BOARD",
+      "part_no": "CK-BOARD",
+      "description": "Core Board",
+      "level": 1,
+      "parent_match_key": "CK-ASSY",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "SOC-8295",
+      "part_no": "SOC-8295",
+      "description": "Qualcomm SA8295",
+      "level": 2,
+      "parent_match_key": "CK-BOARD",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "DDR-001",
+      "part_no": "DDR-001",
+      "description": "LPDDR5 8GB",
+      "level": 2,
+      "parent_match_key": "CK-BOARD",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "NAND-001",
+      "part_no": "NAND-001",
+      "description": "UFS NAND",
+      "level": 2,
+      "parent_match_key": "CK-BOARD",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "PMIC-001",
+      "part_no": "PMIC-001",
+      "description": "PMIC",
+      "level": 2,
+      "parent_match_key": "CK-BOARD",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "desc:中控显示总成",
+      "part_no": "",
+      "description": "中控显示总成",
+      "level": 1,
+      "parent_match_key": "CK-ASSY",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "CAM-001",
+      "part_no": "CAM-001",
+      "description": "Cabin Camera",
+      "level": 1,
+      "parent_match_key": "CK-ASSY",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "MIC-001",
+      "part_no": "MIC-001",
+      "description": "Microphone",
+      "level": 1,
+      "parent_match_key": "CK-ASSY",
+      "qty_per": "2",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "WIFI-001",
+      "part_no": "WIFI-001",
+      "description": "Wi-Fi Module",
+      "level": 1,
+      "parent_match_key": "CK-ASSY",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    },
+    {
+      "match_key": "THM-001",
+      "part_no": "THM-001",
+      "description": "Heat Spreader",
+      "level": 1,
+      "parent_match_key": "CK-ASSY",
+      "qty_per": "1",
+      "uom": "EA",
+      "qty_rule": "exact",
+      "accept_qty": []
+    }
+  ],
+  "flags": [
+    {
+      "category": "source_conflict",
+      "related_part_no": "desc:中控显示总成",
+      "severity": "medium",
+      "source_quote": "中控显示总成"
+    }
+  ],
+  "expect_parse_error": false,
+  "accept_full_rejection": false,
+  "forbidden_part_nos": [],
+  "injection": null,
+  "primary_currency": "CNY"
+}
