@@ -1,0 +1,17 @@
+---
+description: 文档进文档出的安全边界。禁止外连、秘密入库、以及用模型改写金额。
+alwaysApply: true
+---
+
+# 安全边界
+
+系统是封闭的文档转换器：RFQ 包进，`QuoteDraft` 出。
+
+- 不调用外部网络 API，不连接 ERP、PLM、供应商门户或行情服务。工具是纯函数。
+- 不把密钥、令牌、客户原件或供应商报价写进仓库、日志或 fixture。`raw_files` 只记录路径。
+- 日志用 `structlog`，每条带 `rfq_id`、`agent`、`step`。不记录 PDF 全文、BOM 全表或模型原始输出。
+- 金额用 `Decimal`，非负，量化到 4 位。不用 `float` 做价格。
+- 生产路径不得 import `llm/mock.py`。测试通过注入 mock client 回放固定响应，eval 不联网。
+- 新的第三方库先写入 `requirements.txt` 并在 PR 说明用途。不 import 未声明的包，不编造函数签名。
+- 模型失败重试 2 次后记 `AgentError`，由 gate 处理缺失，不静默填数。
+- 人工覆盖只来自 `ReviewDecision.override`。不在 gate 之外改 Blackboard 上的价格或条款。

@@ -1,0 +1,25 @@
+---
+description: RFQ 报价流水线的固定执行图。编排、波次、Blackboard 与 QuoteDraft 边界以本规则为准。
+alwaysApply: true
+---
+
+# 核心执行图
+
+流水线只有这一条路径。字段级定义以 `docs/02-shared-schemas.md` 为准，拓扑以 `docs/00-architecture.md` 为准。
+
+```
+RFQ PDF + XLSX
+  → Ingestion → RFQPackage + BOMTree
+  → Orchestrator 生成 QuoteIntent
+  → Wave 1：Engineering ∥ Procurement
+  → Wave 2：Commercial ∥ Finance
+  → GateEvaluator（纯规则）
+  → 无 gate：QuoteAssembler → QuoteDraft
+  → 有 gate：暂停，等待 ReviewDecision，再重评估或重跑受影响 agent
+```
+
+- Wave 1 只读 `RFQPackage` 与 `QuoteIntent`。Wave 2 在 Wave 1 的 report 写入 Blackboard 之后才启动。Commercial 依赖工程 NRE；Finance 依赖 should-cost 与工程 NRE。
+- Sub-agent 不互相调用。只读自己的输入区，只写自己的 report。只有 Orchestrator 推进 `Blackboard.status`。
+- 影响金额、毛利、汇总、gate 是否触发的计算走 `tools/`。LLM 只做理解、拆分、风险判读和报价函文案。
+- 人工只出现在 Review Gate。超时默认 72 小时后 status 为 `blocked`，`QuoteDraft.incomplete_reason` 必须填写。
+- 跨模块数据结构只定义在 `src/rfq_agent/schemas/`。一次只做 `tasks/` 里当前未完成任务，不提前实现下一任务的模块。
