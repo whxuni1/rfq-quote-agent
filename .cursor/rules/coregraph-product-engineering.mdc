@@ -1,0 +1,15 @@
+---
+description: Coregraph product engineering for the RFQ quote agent. Use when changing agents, schemas, tools, gates, prompts, tasks, or tests.
+globs: src/**/*.py,tests/**/*.py,tasks/**/*.md,docs/**/*.md,pyproject.toml,requirements.txt
+alwaysApply: false
+---
+
+# Coregraph product engineering
+
+This repository is the Coregraph automotive-hardware RFQ quote agent. Before editing, read `AGENTS.md`, `docs/00-architecture.md`, `docs/01-repo-structure.md`, and `docs/02-shared-schemas.md`. Work the next `tasks/*.md` file whose status is `TODO`. Do not implement a later task early.
+
+- Python 3.11+. Cross-module data is frozen Pydantic v2 in `src/rfq_agent/schemas/`. `Blackboard` is the only mutable model.
+- Sub-agents exchange only models, or their JSON, through the orchestrator and blackboard. Cost, margin, rollup, and gate decisions stay in deterministic tools. LLM calls go through `src/rfq_agent/llm/`.
+- One task, one change set. Set that task to `DOING`, then `DONE` with a completion note. If a task and `docs/02-shared-schemas.md` disagree, stop and use the blocker format in `tasks/40-iteration-loop.md`.
+- Finish a task only when `pytest tests/`, `mypy --strict`, and `ruff check` pass. Tool changes also run `pytest tests/unit/`. Orchestrator changes also run `pytest tests/agents/test_orchestrator.py`.
+- A new third-party import belongs in `requirements.txt` with a stated purpose. Do not add a dependency for agent configuration.
