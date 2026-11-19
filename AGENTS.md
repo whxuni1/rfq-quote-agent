@@ -51,7 +51,8 @@ rfq-quote-agent/
 ├── docs/                          # 架构/结构/schema 规范（只读，Codex 参照执行）
 │   ├── 00-architecture.md
 │   ├── 01-repo-structure.md
-│   └── 02-shared-schemas.md
+│   ├── 02-shared-schemas.md
+│   └── 03-enterprise-work-graph.md
 ├── tasks/                         # 给 Codex 的任务 prompt（按编号顺序执行）
 │   ├── 10-orchestrator.md
 │   ├── 11-engineering.md
