@@ -36,7 +36,7 @@ These are design intent, not implemented code. Keep them when the tasks are buil
 - Missing reviewer callback fails closed: gate triggered and `reviewer_cb is None` → `blocked` (`tasks/30-eval-harness.md`). Review timeout → `blocked`, not auto-approve (`tasks/17-human-loop.md`).
 - Tool layer is forbidden from importing HTTP or provider SDKs (`tasks/20-tool-layer.md`, `AGENTS.md` §2.1).
 - `LLMClient` is injectable, so an offline or private endpoint is possible (`docs/01-repo-structure.md`).
-- Sub-agents do not call each other. The orchestrator is the only status mover, by convention (`docs/00-architecture.md` §3).
+- Sub-agents do not call each other. Each sub-agent writes only its own report field. The orchestrator is the only status mover, and gate evaluation runs after the wave completes (`docs/00-architecture.md` §3, `tasks/10-orchestrator.md`).
 - Override is required to pass a Pydantic type check rather than be applied blindly (`tasks/17-human-loop.md`).
 - Eval and fixture generation are specified to run without a network (`tasks/30-eval-harness.md`).
 
@@ -170,15 +170,16 @@ These are design intent, not implemented code. Keep them when the tasks are buil
 - Remediation: sign the price book and standard terms. Pin the digest on the quote and in the audit event. Ignore unsigned overrides unless the principal has role `pricing_admin`. Reload on an explicit version bump rather than a process-lifetime cache.
 - Verification: a flipped byte in `commodity_prices.yaml` fails startup. A quote record contains the book digest. Two calls with different digests do not silently share one cache entry.
 
-### TM-13 — Shared mutable blackboard under concurrent agents
+### TM-13 — Shared mutable blackboard under `asyncio.gather`
 
-- Class: design defect.
-- Severity: Medium. Confidence: Medium. asyncio interleaving is likely. It was not executed.
-- Evidence: wave 1 and wave 2 use `asyncio.gather` on one blackboard (`docs/00-architecture.md` lines 40–43 and 108–110; `tasks/10-orchestrator.md` lines 35–40). Both agents append `trace` and may touch shared lists. The object is mutable by design.
-- Failure: cooperative tasks interleave on `trace`, `decision_log`, or status and drop an audit event or overwrite a report reference. That is corruption and an audit gap, not by itself cross-tenant access.
-- Business impact: missing engineering or procurement output, or a trace that does not match the quote.
-- Remediation: give each agent an immutable input view and a private result object. Only the orchestrator merges results onto the blackboard, on a single task, after `gather` returns. Append audit events through the TM-09 API, not a shared list.
-- Verification: a test where both wave-1 agents await and then append 100 trace events yields exactly 200 events in a defined order.
+- Class: hypothetical implementation risk. Not a design defect. The documented execution model does not establish lost reports or lost audit events.
+- Severity: Low. Confidence: High that the spec partitions writes. Low that a lost update occurs if that partition is followed.
+- Evidence: wave 1 and wave 2 share one blackboard via `asyncio.gather` (`docs/00-architecture.md` lines 40–43 and 108–110; `tasks/10-orchestrator.md` lines 35–40). The same section limits each sub-agent to its own report field and makes the orchestrator the only status writer (`docs/00-architecture.md` §3). Gate evaluation runs after the wave returns (`tasks/10-orchestrator.md` lines 42–45). `decision_log` is written from `apply_decision`, which is not inside the gather. No specified step reads a shared list, awaits, and writes it back.
+- Why this is not a demonstrated race: on one asyncio event loop, `list.append` and an attribute assignment do not yield. Two coroutines appending `trace`, or writing `eng_report` and `proc_report`, do not interleave inside those operations. A test that awaits and then appends 100 events does not show loss.
+- Residual, if an implementer ignores the partition: a lost update requires a read/modify/write that spans an `await`, such as `events = bb.trace; await llm.chat(...); bb.trace = events + [event]`, or one agent assigning the other agent's report. That pattern is not in the spec. The mutable blackboard remains a real tampering issue for status and overrides; that is TM-08, not a concurrency bug.
+- Business impact: none under the specified model. An implementation that copies and replaces `trace` across an await could drop an audit event.
+- Remediation: do not redesign the scheduler for this finding. While implementing, append or assign a field without awaiting between the read and the write, and do not replace the whole `trace` list. Route audit events through the TM-09 append-only API when that exists. A private result object per agent is optional hardening, not a P0 or P1 blocker.
+- Verification: none as a release gate. Add a regression only if an implementation introduces an await-spanning update of `trace`, `decision_log`, or `status`. Assert that implementation's event count. Do not treat "200 appends after an await" as evidence of a spec defect.
 
 ### TM-14 — Supply chain and CI are specified but absent
 
@@ -220,14 +221,15 @@ Do not ingest a real customer RFQ until P0 is accepted and the tests in §7 exis
 8. Log redaction and a ban on prompt bodies in traces (TM-04).
 9. Signed price book and standard terms. Secret-store credentials. Production refuses the mock client (TM-05, TM-12).
 10. HTML escaping, upload limits, parse timeout (TM-11).
-11. Single-writer blackboard merge (TM-13).
-12. Lockfile, dependency audit, secret scan, HTTP-import lint. No MCP adapter (TM-06, TM-14).
+11. Lockfile, dependency audit, secret scan, HTTP-import lint. No MCP adapter (TM-06, TM-14).
+
+TM-13 does not add a work item. The spec already partitions report writes and status updates. A single-writer merge is optional hardening, not a fix for a failure the execution model exhibits.
 
 ### P2 — before a multi-tenant or production pilot
 
-13. Per-tenant storage ACL and a documented airgap and private-VPC runbook, including the retention commitment of the approved endpoint (TM-01, TM-10).
-14. Two-person rule for critical waivers (margin floor, liability cap, single-source SoC).
-15. Eval fixtures for injection, cross-tenant access, override rejection, path escape, and zero egress. These join `tests/eval/` as release gates, not as samples to send to a provider.
+12. Per-tenant storage ACL and a documented airgap and private-VPC runbook, including the retention commitment of the approved endpoint (TM-01, TM-10).
+13. Two-person rule for critical waivers (margin floor, liability cap, single-source SoC).
+14. Eval fixtures for injection, cross-tenant access, override rejection, path escape, and zero egress. These join `tests/eval/` as release gates, not as samples to send to a provider.
 
 ## 7. Release-gate tests
 
@@ -245,7 +247,6 @@ Do not ingest a real customer RFQ until P0 is accepted and the tests in §7 exis
 | `test_rfq_id_path_jail` | Traversal ids do not create files outside the run root |
 | `test_html_escape` | Script-like part text is escaped |
 | `test_price_book_signature` | Modified YAML refuses to load |
-| `test_wave_trace_completeness` | Concurrent agents do not drop trace events |
 
 ## 8. What was not claimed
 
@@ -254,3 +255,4 @@ Do not ingest a real customer RFQ until P0 is accepted and the tests in §7 exis
 - No provider was contacted, so retention behavior of any vendor is not asserted. The defect is the missing control and the production default.
 - MCP is not misconfigured. It is not there.
 - Parser memory-corruption or XXE outcomes were not demonstrated. Only the absence of limits and the path and HTML designs are verified from the text.
+- TM-13 does not claim that `asyncio.gather` drops reports or audit events. Each sub-agent writes its own report, the orchestrator alone advances status, and a single-threaded `list.append` does not yield. A lost update is hypothetical and would require an await-spanning read/modify/write that the spec does not describe.
