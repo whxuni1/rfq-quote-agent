@@ -2,6 +2,8 @@
 
 Status: design proposal. It does not change the runtime, the task sequence, or the Pydantic contracts in `docs/02-shared-schemas.md`.
 
+Revised after review: an RFQ revision pins the document revisions it contained; tool and model bodies are stored as artifacts, not hashes alone; impact closes over the whole BOM ancestor chain with no silent hop cap; tenant-wide aliases stay unique when `customer_id` is null.
+
 Start anchor: 19 Nov 2026 (Asia/Shanghai). The three increments below are a sequence with exit criteria. They are not a staffing estimate.
 
 ## 1. Decision
@@ -59,7 +61,7 @@ Scores are design judgments for an early single-team deployment. 5 is more favor
 |---|---|---|
 | Quote line → cost estimate → tool evidence → document span | 3 | Foreign keys. |
 | BOM ancestor / subtree | Typical hardware depth under 8 | Adjacency list plus a materialized path on the revision row. |
-| What a BOM, document, or part change makes stale | 2–4 | Written at commit into `impact_item`. The read is a filter, not a traversal. |
+| What a BOM, document, or part change makes stale | Whole ancestor chain | Written at commit into `impact_item` by a relational closure. The read is a filter. |
 | Where a part is used on open quotes | 2 | Join `part` → `bom_item_revision` → `quote_line`. |
 | Replay one RFQ | One stream | `work_event` ordered by `(tenant_id, stream_id, seq)`. |
 | Arbitrary cross-program path search | Unbounded | Not a product requirement in this horizon. This is the query that would reopen option C. |
@@ -103,11 +105,11 @@ Structural relationships are foreign keys. They are the ones the product queries
 | Name | From | To | Cardinality | Notes |
 |---|---|---|---|---|
 | submitted | Customer | RFQ | 1:N | |
-| has_document | RFQ revision | Document revision | 1:N | Pins the bytes the extractors saw. |
+| has_document | RFQ revision | Document revision | 1:N | Table `rfq_document`. The snapshot a quote priced. `document.rfq_id` only says which request owns the file. |
 | contains | RFQ revision | BOMItem revision | 1:N | The BOM snapshot for that revision. |
 | parent_of | BOMItem | BOMItem | tree | `parent_item_id`. Level 0 has no parent, matching the current validator. |
 | specifies | BOMItem revision | Part | N:1 | The usage points at the part. |
-| known_as | Part | Alias | 1:N | Scheme: `customer_pn`, `internal_pn`, `manufacturer_pn`. |
+| known_as | Part | Alias | 1:N | Scheme: `customer_pn`, `internal_pn`, `manufacturer_pn`. Unique including a null `customer_id`, so a tenant-wide internal part number cannot be claimed twice. |
 | sourced_from | Part | Supplier | N:M | `landscape`: single, dual, multi, open. Matches `ShouldCostLine.supplier_landscape`. |
 | answers | Quote revision | RFQ revision | N:1 | A quote always names the RFQ revision it prices. |
 | prices | Quote line | BOMItem revision | N:1 | Line identity follows the BOM item, not the display line number alone. |
@@ -165,9 +167,15 @@ History of a single entity is `supersedes` plus the event stream. There is no up
 
 Evidence kinds: `document_span`, `tool_output`, `rule_firing`, `model_output`, `human_note`, `imported_record`.
 
-A document span stores document id, revision, and a locator (page and character range, or sheet and cell). A tool output stores tool name, method version, input hash, and output hash. That is the durable form of `AgentTrace.output_hash`, broken out so a single number can be cited without dragging the whole trace.
+A document span stores document id, revision, and a locator inside that revision (page and character range, or sheet and cell). The bytes of the file live behind `document_revision.locator`, addressed by `content_hash`.
 
-Model output evidence records the prompt version and the output hash. It supports a classification. It is not a citation for a price.
+A tool output stores tool name and method version, and it references two artifacts: the request body and the response body. A model output stores the prompt version and references the response body. Hashes on the evidence row are copies of `artifact.content_hash` so a citation can be checked without loading the body. They are not a substitute for the body.
+
+An artifact is immutable and content-addressed. The row holds `content_hash`, `media_type`, `byte_size`, and `locator`. The same hash inside a tenant is one artifact. Event payloads store the artifact id and the hash. They do not embed the body. File bytes and model transcripts stay out of `work_event` for the same reason PDF bytes stay out of `document_revision`.
+
+Retention: an artifact referenced by `evidence` is kept for as long as that evidence row exists. A document revision's bytes, behind its own locator, follow the same rule. Those rows are removed only by an operator deleting the stream, which is outside this horizon. A projection rebuild does not delete artifacts or document bytes. Execution replay that cannot read a cited artifact, or whose bytes do not match `content_hash`, fails closed. It does not call the live tool or model to fill the gap.
+
+Model-output evidence supports a classification. It is not a citation for a price. The price citation is the tool-output evidence on the cost estimate, and that evidence's response artifact is what execution replay pins.
 
 ### 5.3 Tenant isolation
 
@@ -181,25 +189,31 @@ Two modes, both fed by the same log.
 
 **State replay** folds `work_event` for one stream and rebuilds the projection. This is how projection bugs are repaired and how audits show that the tables match the log. Folding does not call tools or models.
 
-**Execution replay** re-invokes the runner for one task with tool inputs and outputs pinned from evidence, and with the LLM client pointed at the recorded model output. This matches the existing mock-LLM test seam. The product uses it to see whether a code change would alter a decision. It writes a new run and new decisions. It does not rewrite the old ones.
+**Execution replay** re-invokes the runner for one task. Tool request and response bodies are loaded from the artifacts cited by that run's evidence. The LLM client is pointed at the stored model-response artifact. This matches the existing mock-LLM test seam. The product uses it to see whether a code change would alter a decision. It writes a new run and new decisions. It does not rewrite the old ones. A missing or hash-mismatched artifact aborts the replay before any tool or model is called.
 
 Commands are idempotent on `(tenant_id, idempotency_key)`. Replaying a command whose body matches the stored hash returns the original changeset. A different body with the same key is a conflict.
 
 ### 5.5 Impact analysis
 
-Impact is a pure function of a changeset and the current projection. The command transaction writes `impact_item` rows before commit. The function walks at most five hops along a fixed edge set (`parent_of`, `supports`, `prices`, `authorizes`, `cites`) and stops at the depth cap.
+Impact is a pure function of a changeset and the current projection. The command transaction writes every `impact_item` row before commit. There is no hop cap. A changeset that commits has `impact_status = complete`. If the closure cannot be finished, the transaction rolls back and the command returns an error. Readers of a committed changeset do not re-derive dependencies, and they do not have to wonder whether a deep ancestor was skipped.
+
+The function is three SQL closures, not a generic graph walk.
+
+1. **Ancestor closure.** From each changed BOM item, select every item whose `path` is equal to the changed path or is a strict prefix of it (`changed.path = item.path OR changed.path LIKE item.path || '/%'`). A structure change also selects descendants (`item.path LIKE changed.path || '/%'`). Path comparison covers the whole chain, including a leaf whose rollup crosses more than five parents.
+2. **Money closure.** Select every `cost_estimate` and `quote_line` whose `bom_item_id` is in that set, then every open `approval` on those quotes. A parent rollup is included because the ancestor is in the set, not because a walker happened to have hops left.
+3. **Citation closure.** A document-span change first selects the BOM revisions whose evidence cites that span, then runs closures 1 and 2. A supplier or commodity change first selects the estimates that cite it, then the quote lines and approvals that consume them, plus the ancestor closure of those BOM items.
 
 | Change | Effect | Reason code |
 |---|---|---|
-| BOM qty, parent, or part changes | Cost estimates and quote lines on that item become `stale`. Open approvals on quotes that price it become `reapprove`. | `bom_qty_changed`, `bom_structure_changed`, `part_swapped` |
-| Document revision whose span is cited by a BOM line | Those BOM revisions and their estimates become `stale`. | `document_span_changed` |
-| Supplier link or commodity basis cited by an estimate | Open quotes using that estimate become `stale`. | `supplier_basis_changed` |
+| BOM qty, parent, or part changes | The item, its ancestors, and on a structure change its descendants. Their estimates and quote lines become `stale`. Open approvals on those quotes become `reapprove`. | `bom_qty_changed`, `bom_structure_changed`, `part_swapped` |
+| Document revision whose span is cited by a BOM line | Those BOM revisions, their ancestor rollups, and their estimates become `stale`. | `document_span_changed` |
+| Supplier link or commodity basis cited by an estimate | That estimate, its quote lines, ancestor rollups, and open approvals become `stale`. | `supplier_basis_changed` |
 | Human override whose gate lists affected agents | Those tasks become `rerun`. | `override_applied` |
 | Approval granted | No downstream stale rows. The approval pins the quote revision it names. | `none` |
 
 `ECNSensitivity` in the engineering report stays an analytical output of the agent. The graph impact function does not call a model and does not invent a cost delta. A cost delta appears only after the tool recomputes a new `CostEstimate`.
 
-The depth cap is deliberate. Interactive unbounded traversal is the requirement that would justify a graph engine. It is not this product's requirement.
+Interactive unbounded traversal, across programs and domains, is still the requirement that would justify a graph engine. Impact inside one RFQ is a bounded SQL closure over paths and foreign keys. The API does not offer an open-ended walk, so it does not need a depth cap to stay correct.
 
 ## 6. Schema proposal
 
@@ -255,6 +269,7 @@ create table changeset (
   )),
   actor_id uuid not null,
   opened_at timestamptz not null,
+  impact_status text not null check (impact_status in ('complete', 'not_applicable')),
   primary key (tenant_id, changeset_id)
 );
 
@@ -276,7 +291,7 @@ create table work_event (
 );
 ```
 
-`stream_id` is the RFQ id for RFQ-scoped facts and the part id for part-master facts. Sequence is total per stream, not global. Payload mirrors the typed columns for audit. Queries that filter money, status, or revision use the typed tables.
+`stream_id` is the RFQ id for RFQ-scoped facts and the part id for part-master facts. Sequence is total per stream, not global. Payload mirrors the typed columns and the artifact ids. It does not embed file bytes, tool bodies, or model transcripts. Queries that filter money, status, or revision use the typed tables. `impact_status` is `complete` when the closure in section 5.5 ran, and `not_applicable` for a changeset that cannot stale anything, such as a pure projection repair. A changeset is not stored with a partial impact list.
 
 Event types for this horizon:
 
@@ -344,6 +359,16 @@ create table document_revision (
   primary key (tenant_id, document_id, revision)
 );
 
+create table rfq_document (
+  tenant_id uuid not null,
+  rfq_id uuid not null,
+  rfq_revision int not null,
+  document_id uuid not null,
+  document_revision int not null,
+  source_event_id uuid not null,
+  primary key (tenant_id, rfq_id, rfq_revision, document_id)
+);
+
 create table bom_item (
   tenant_id uuid not null,
   bom_item_id uuid not null,
@@ -405,7 +430,7 @@ create table alias (
   value text not null,
   customer_id uuid,
   primary key (tenant_id, alias_id),
-  unique (tenant_id, entity_type, scheme, value, customer_id)
+  unique nulls not distinct (tenant_id, entity_type, scheme, value, customer_id)
 );
 
 create table supplier (
@@ -460,6 +485,21 @@ create table agent_run (
   primary key (tenant_id, run_id)
 );
 
+create table artifact (
+  tenant_id uuid not null,
+  artifact_id uuid not null,
+  content_hash text not null,
+  media_type text not null,
+  byte_size bigint not null check (byte_size >= 0),
+  locator text not null,
+  kind text not null check (kind in (
+    'tool_request', 'tool_response', 'model_response', 'source_file'
+  )),
+  created_at timestamptz not null,
+  primary key (tenant_id, artifact_id),
+  unique (tenant_id, content_hash)
+);
+
 create table evidence (
   tenant_id uuid not null,
   evidence_id uuid not null,
@@ -473,13 +513,20 @@ create table evidence (
   span_locator jsonb,
   tool_name text,
   method_version text,
+  input_artifact_id uuid,
+  output_artifact_id uuid,
   input_hash text,
   output_hash text,
   rule_id text,
   recorded_by uuid not null,
   recorded_at timestamptz not null,
   source_event_id uuid not null,
-  primary key (tenant_id, evidence_id)
+  primary key (tenant_id, evidence_id),
+  check (
+    (kind = 'tool_output' and input_artifact_id is not null and output_artifact_id is not null)
+    or (kind = 'model_output' and output_artifact_id is not null)
+    or (kind not in ('tool_output', 'model_output'))
+  )
 );
 
 create table decision (
@@ -611,7 +658,7 @@ create table impact_item (
   target_revision int,
   effect text not null check (effect in ('stale', 'rerun', 'reapprove', 'none')),
   reason_code text not null,
-  hop int not null check (hop between 1 and 5),
+  via text not null check (via in ('ancestor', 'descendant', 'estimate', 'quote', 'approval', 'task')),
   primary key (tenant_id, impact_id)
 );
 ```
@@ -621,6 +668,7 @@ create table impact_item (
 Indexes the named queries need:
 
 - `work_event (tenant_id, stream_id, seq)`
+- `rfq_document (tenant_id, rfq_id, rfq_revision)`
 - `bom_item_revision (tenant_id, part_id)`
 - `bom_item_revision (tenant_id, path text_pattern_ops)`
 - `cost_estimate (tenant_id, bom_item_id, bom_revision)`
@@ -628,6 +676,8 @@ Indexes the named queries need:
 - `quote (tenant_id, rfq_id, status)`
 - `link (tenant_id, from_id) where valid_to is null`
 - `impact_item (tenant_id, changeset_id)`
+- `artifact (tenant_id, content_hash)`
+- `evidence (tenant_id, output_artifact_id)`
 
 RLS: `enable` and `force` on every table above except `tenant`. One policy, `tenant_id = current_setting('app.tenant_id')::uuid`, for both `using` and `with check`.
 
@@ -635,7 +685,7 @@ Partitioning of `work_event` waits until a stream index is no longer enough. It 
 
 ## 7. API boundaries
 
-Three surfaces. No open graph language. If a caller needs a traversal, it becomes a named query with a depth cap.
+Three surfaces. No open graph language. If a caller needs a traversal, it becomes a named query. Impact and BOM ancestry are closures over the whole chain, not capped walks.
 
 ### 7.1 Command API
 
@@ -687,7 +737,7 @@ Read-only, RLS-scoped.
 
 | Query | Returns |
 |---|---|
-| `GET /rfqs/{id}?revision=` | RFQ revision, document refs, BOM heads |
+| `GET /rfqs/{id}?revision=` | That RFQ revision, the document revisions pinned in `rfq_document`, and the BOM revisions for that same revision |
 | `GET /rfqs/{id}/blackboard` | A Blackboard-shaped JSON document assembled for the runner. Read only. |
 | `GET /quotes/{id}/provenance?revision=` | Each line → estimate → evidence → document span, plus the decision ids that touched the line |
 | `GET /changesets/{id}/impact` | `impact_item` rows for that changeset |
@@ -738,6 +788,7 @@ Exit criteria:
 - The existing ingestion fixture can be deleted from the projection tables and rebuilt byte-for-byte in business columns from `work_event`.
 - A session scoped to tenant B cannot read tenant A's RFQ, including through the event log.
 - A BOM path query returns ancestors for a multi-level fixture.
+- After a later document revision is ingested, `GET /rfqs/{id}?revision=` for the earlier revision still returns the document revisions pinned at that time.
 - The current agent tests stay green. This increment adds an adapter and does not rewrite sub-agents.
 
 ### Increment 2 — attribute the judgment
@@ -750,8 +801,9 @@ Exit criteria:
 
 - Every stored unit price has `derivation = computed`, a system actor, and tool-output evidence.
 - Every human gate decision is a `decision` row with kind `human` actor and at least one evidence cite.
-- A BOM quantity change on a fixture writes `impact_item` rows for the estimates and quote lines that priced the previous revision, with a reason code and a hop ≤ 5.
-- Provenance query for one quote line resolves to a document span or a tool hash.
+- A leaf quantity change whose ancestor chain is longer than five parents still writes `impact_item` rows for every ancestor estimate, the rolled-up quote line, and any open approval. A committed changeset has `impact_status = complete`.
+- Two ingests that claim the same `internal_pn` with a null `customer_id` conflict on the alias constraint.
+- Provenance query for one quote line resolves to a document span or to a tool artifact whose bytes match the stored hash.
 
 ### Increment 3 — close the quote
 
@@ -763,17 +815,17 @@ Exit criteria:
 
 - An approval names one quote revision. A later `quote.assemble` produces a new revision that is not approved.
 - Where-used for a part returns only open quotes in the caller's tenant.
-- Execution replay of one procurement task, with tool I/O pinned, appends a new run and leaves the original estimate in place.
+- Execution replay of one procurement task loads the stored tool request and response artifacts, appends a new run, and leaves the original estimate in place. Removing the artifact locator makes the same call fail before any tool is invoked.
 - Named-query latency on the fixture set is recorded. The section 10 triggers are written down as met or not met.
 
 Out of this horizon: a graph engine, cross-tenant catalogs, ERP or PLM connections, an ECO workflow beyond the impact rows above, and a general-purpose query language.
 
 ## 10. When a graph database would be justified
 
-Reopen the choice only if a named query, after indexes and the depth cap, meets one of these on a realistic tenant volume:
+Reopen the choice only if a named query, after indexes, meets one of these on a realistic tenant volume:
 
 - p95 above 200 ms for provenance, where-used, or impact-by-changeset, and the plan is already an index lookup rather than a sequential scan
-- a product requirement for interactive traversal deeper than 5 hops, or fan-out beyond the impact function's write-time walk
+- a product requirement for interactive traversal that is not one of the named closures (ancestor path, citation, where-used)
 - a second domain (quality deviations, field failures, cross-program ECOs) whose primary interaction is multi-hop where-used across those domains
 
 The migration path is a projector that folds `work_event` into the engine as a read model. Commands stay on Postgres. The engine does not become the place prices are stored.
@@ -786,6 +838,6 @@ These are choices, recorded so implementation does not reopen them silently.
 
 1. One tenant is one quoting organization. Parts are not shared across tenants. Customers inside a tenant do not automatically share a part; aliases are customer-scoped when the scheme is `customer_pn`.
 2. Who is allowed to approve a margin-floor breach stays a rule in the gate engine. The graph stores the actor and the approval. It does not store an authority matrix in this horizon.
-3. Document bytes live behind the locator on `document_revision`. The graph stores the content hash. The choice of disk versus object storage is separate and does not change the schema.
+3. Document bytes, tool bodies, and model responses live behind locators on `document_revision` and `artifact`. The graph stores the content hash and the locator. The choice of disk versus object storage is separate. Retention follows the citing evidence or document row, as specified in section 5.2.
 4. Revision history is linear. Alternative BOM proposals are separate RFQ revisions, not branches.
 5. The blackboard JSON remains the in-process contract among agents. The compatibility read exists so the runner can rehydrate. It is not a write model.
